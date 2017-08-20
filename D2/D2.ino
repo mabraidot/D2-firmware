@@ -1,7 +1,5 @@
 #include "Arduino.h"
-#include "Macros.h"
 #include "Configurations.h"
-#include "EndstopInterrupts.h"
 #include "Endstops.h"
 
 
@@ -12,3 +10,13 @@ void setup() {
 void loop() {
   
 }
+
+
+void debug(String message, bool eol=false){
+  if(eol){
+    Serial.println(message);
+  }else{
+    Serial.print(message);
+  }
+}
+

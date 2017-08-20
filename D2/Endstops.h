@@ -3,14 +3,28 @@
 
 #include "Arduino.h"
 
+
+/**
+ * Patch for pins_arduino.h (...\Arduino\hardware\arduino\avr\variants\mega\pins_arduino.h)
+ *
+ * These macros for the Arduino MEGA do not include the two connected pins on Port J (D13, D14).
+ * So we extend them here because these are the normal pins for Y_MIN and Y_MAX on RAMPS.
+ * There are more PCI-enabled processor pins on Port J, but they are not connected to Arduino MEGA.
+ */
+
+#if defined(ARDUINO_AVR_MEGA2560) || defined(ARDUINO_AVR_MEGA)
+    #undef  digitalPinToPCICR
+    #define digitalPinToPCICR(p)    ( ((p) >= 10 && (p) <= 15) || \
+                                      ((p) >= 50 && (p) <= 53) || \
+                                      ((p) >= 62 && (p) <= 69) ? &PCICR : (uint8_t *)0)
+#endif
+
+								
+								
+								
 class Endstops {
 
   public:
-
-    static bool enabled, enabled_globally;
-    static volatile char endstop_hit_bits; // use X_MIN, Y_MIN and Z_MIN as BIT value
-
-    static byte current_endstop_bits, old_endstop_bits;
 
     Endstops() {};
 
@@ -18,34 +32,10 @@ class Endstops {
      * Initialize the endstop pins
      */
     void init();
-
-    /**
-     * Update the endstops bits from the pins
-     */
     static void update();
-
-    /**
-     * Print an error message reporting the position when the endstops were last hit.
-     */
-    static void report_state(); //call from somewhere to create an serial error message with the locations the endstops where hit, in case they were triggered
-
-    // Enable / disable endstop checking globally
-    static void enable_globally(bool onoff=true) { enabled_globally = enabled = onoff; }
-
-    // Enable / disable endstop checking
-    static void enable(bool onoff=true) { enabled = onoff; }
-
-    // Disable / Enable endstops based on ENSTOPS_ONLY_FOR_HOMING and global enable
-    static void not_homing() { enabled = enabled_globally; }
-
-    // Clear endstops (i.e., they were hit intentionally) to suppress the report
-    static void hit_on_purpose() { endstop_hit_bits = 0; }
 
 };
 
 extern Endstops endstops;
-
-#define ENDSTOPS_ENABLED  endstops.enabled
-
 
 #endif //ENDSTOPS_H
