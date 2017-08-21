@@ -4,12 +4,14 @@
 
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(250000);
+  endstops.init();
 }
 
 void loop() {
   
 }
+
 
 
 void debug(String message, bool eol=false){
