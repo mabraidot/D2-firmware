@@ -1,4 +1,4 @@
-// For RAMPS 1.4
+/** RAMPS 1.4 PINOUT CONFIGURATION **/
 #define X_STEP_PIN         54
 #define X_DIR_PIN          55
 #define X_ENABLE_PIN       38
@@ -17,4 +17,7 @@
 #define Z_MIN_PIN          18
 //#define Z_MAX_PIN          19
 
+
+/** GENERAL CONFIGURATIONS  **/
+#define DEBUG              true
 
