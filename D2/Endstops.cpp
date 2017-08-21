@@ -3,6 +3,7 @@
  */
 
 #include "Configurations.h"
+#include "Debug.h"
 #include "Endstops.h"
 #include <TimerOne.h>
 
@@ -45,7 +46,7 @@ void Endstops::update(void) {
   stateA = (stateA << 1) | !digitalRead(X_MIN_PIN) | 0xe000;
   if(stateA == 0xf000){
     _A_Hit = 1;   // endstop has hit
-    Serial.println("Endstop A has hit.");
+    debug.print("Endstop A has hit.", 1);
     
   }
 
@@ -53,14 +54,14 @@ void Endstops::update(void) {
   stateB = (stateB << 1) | !digitalRead(Y_MIN_PIN) | 0xe000;
   if(stateB == 0xf000){
     _B_Hit = 1;   // endstop has hit
-    Serial.println("Endstop B has hit.");
+    debug.print("Endstop B has hit.", 1);
   }
 
   static uint16_t stateC = 0; // current debounce status
   stateC = (stateC << 1) | !digitalRead(Z_MIN_PIN) | 0xe000;
   if(stateC == 0xf000){
     _C_Hit = 1;   // endstop has hit
-    Serial.println("Endstop C has hit.");
+    debug.print("Endstop C has hit.", 1);
   }
 }
 
