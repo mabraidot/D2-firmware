@@ -39,12 +39,12 @@ void setup() {
   stepperC.setAcceleration(100.0);
   */
   
-  char rpm = 400;
-  stepperA.begin(rpm,1);
+  char rpm = 150;
+  stepperA.begin(rpm,2);
   stepperA.setSpeedProfile(LINEAR_SPEED, 3000, 2000);
-  stepperB.begin(rpm,1);
+  stepperB.begin(rpm,2);
   stepperB.setSpeedProfile(LINEAR_SPEED, 3000, 2000);
-  stepperC.begin(rpm,1);
+  stepperC.begin(rpm,2);
   stepperC.setSpeedProfile(LINEAR_SPEED, 3000, 2000);
   
 }
@@ -70,6 +70,17 @@ void stepper_rotate(int deg){
   if(deg < 0 && deg < -75){deg = -75;}
   motors.rotate(deg, deg, deg);
 }
+void stepper_choreography(){
+  motors.rotate(-40, -40, -40);
+  motors.rotate(30, 30, 40);
+  motors.rotate(-30, -30, -40);
+  motors.rotate(30, 40, 30);
+  motors.rotate(-30, -40, -30);
+  motors.rotate(40, 30, 30);
+  motors.rotate(-40, -30, -30);
+
+  motors.rotate(40, 40, 40);
+}
 
 
 void process_serial(){
@@ -79,6 +90,7 @@ void process_serial(){
     case 'H': help(); break;
     case 'F': stepper_rotate(Serial.parseInt()); break;
     case 'B': stepper_rotate(-1*Serial.parseInt()); break;
+    case 'C': stepper_choreography(); break;
   }
   
   while (Serial.read() != 10); // dump extra characters till LF is seen (you can use CRLF or just LF)
@@ -92,4 +104,5 @@ void help() {
   Serial.println(F("H: will print this help message again"));
   Serial.println(F("F123: sets the target rotation for the motor to 123 degrees, Forward"));
   Serial.println(F("B123: sets the target rotation for the motor to 123 degrees, Backward"));
+  Serial.println(F("C: Little choreography"));
 }
