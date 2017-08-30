@@ -15,14 +15,18 @@ class Planner
     Planner(void);
 
     void        init    (const bool clearBuffer);
-    int         isEmpty (void);
+		int         isBusy	(void);    
+		int         isEmpty (void);
     int         isFull  (void);
+    int         getXPosition  (void);
+    int         getYPosition  (void);
+    int         getZPosition  (void);
     ringBuffer  get     (void);
     void        next    (void);
     void        put     (int XPosition, int YPosition, int ZPosition);
 
-  //private:
-    ringBuffer bufferQueue[RING_BUFFER_SIZE];
+  private:
+    //ringBuffer bufferQueue[RING_BUFFER_SIZE];
     volatile unsigned char tail;
     volatile unsigned char head;
     volatile unsigned char count;

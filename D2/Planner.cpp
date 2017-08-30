@@ -39,6 +39,11 @@ int Planner::isFull(void)
   return (count >= RING_BUFFER_SIZE);
 }
 
+int Planner::isBusy()
+{
+	return bufferQueue[tail].busy;
+}
+
 void Planner::next(void)
 {
   if(count > 0 && tail < head){
@@ -63,6 +68,33 @@ Planner::ringBuffer Planner::get()
     c.busy = false;
   }
   return c;
+}
+
+int Planner::getXPosition(void)
+{
+	if(count > 0 && tail < head && !bufferQueue[tail].busy){
+		return bufferQueue[tail].XPosition;
+	}else{
+		return 0;
+	}
+}
+
+int Planner::getYPosition(void)
+{
+	if(count > 0 && tail < head && !bufferQueue[tail].busy){
+		return bufferQueue[tail].YPosition;
+	}else{
+		return 0;
+	}
+}
+
+int Planner::getZPosition(void)
+{
+	if(count > 0 && tail < head && !bufferQueue[tail].busy){
+		return bufferQueue[tail].ZPosition;
+	}else{
+		return 0;
+	}
 }
 
 void Planner::put(int XPosition, int YPosition, int ZPosition)
