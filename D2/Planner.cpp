@@ -9,9 +9,9 @@ Planner::Planner(void)
     int XPosition;
     int YPosition;
 		int ZPosition;
-  } bufferRing;
+  } ringBuffer;
 
-  bufferRing bufferQueue[RING_BUFFER_SIZE];
+  ringBuffer bufferQueue[RING_BUFFER_SIZE];
   volatile unsigned char tail;
   volatile unsigned char head;
   volatile unsigned char count;
@@ -48,9 +48,9 @@ void Planner::next(void)
   }
 }
 
-Planner::bufferRing Planner::get()
+Planner::ringBuffer Planner::get()
 {
-  bufferRing c;
+  ringBuffer c;
   if(count > 0 && tail < head && !bufferQueue[tail].busy){
 
     bufferQueue[tail].busy = true;

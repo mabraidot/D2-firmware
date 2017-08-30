@@ -10,19 +10,19 @@ class Planner
       int XPosition;
       int YPosition;
 			int ZPosition;
-    } bufferRing;
+    } ringBuffer;
     
     Planner(void);
 
     void        init    (const bool clearBuffer);
     int         isEmpty (void);
     int         isFull  (void);
-    bufferRing  get     (void);
+    ringBuffer  get     (void);
     void        next    (void);
     void        put     (int XPosition, int YPosition, int ZPosition);
 
   //private:
-    bufferRing bufferQueue[RING_BUFFER_SIZE];
+    ringBuffer bufferQueue[RING_BUFFER_SIZE];
     volatile unsigned char tail;
     volatile unsigned char head;
     volatile unsigned char count;
