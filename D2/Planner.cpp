@@ -3,6 +3,7 @@
 Planner::Planner(void)
 {
 
+  // Structure to store the intended movement position.
   typedef struct
   {
     bool busy;
@@ -11,6 +12,7 @@ Planner::Planner(void)
 		int ZPosition;
   } ringBuffer;
 
+  // Array of ringBuffer structures. Ring buffer design pattern.
   ringBuffer bufferQueue[RING_BUFFER_SIZE];
   volatile unsigned char tail;
   volatile unsigned char head;
@@ -19,6 +21,9 @@ Planner::Planner(void)
   init(true);
 }
 
+/**
+ * Initializes the buffer variables with zeros.
+ */
 void Planner::init (const bool clearBuffer)
 {
     if(clearBuffer){
@@ -29,21 +34,33 @@ void Planner::init (const bool clearBuffer)
     count = 0;
 }
 
+/**
+ * Checks whether is there are more movements or not.
+ */
 int Planner::isEmpty(void)
 {
   return (0 == count);
 }
 
+/**
+ * Checks if planner can store more movements or not.
+ */
 int Planner::isFull(void)
 {
   return (count >= RING_BUFFER_SIZE);
 }
 
+/**
+ * Is the tail movement being processed right now?.
+ */
 int Planner::isBusy()
 {
 	return bufferQueue[tail].busy;
 }
 
+/**
+ * Moves the tail one step further, if there is more movements to step into.
+ */
 void Planner::next(void)
 {
   if(count > 0 && tail < head){
@@ -53,6 +70,9 @@ void Planner::next(void)
   }
 }
 
+/**
+ * Returns a ringBuffer object with all set positions.
+ */
 Planner::ringBuffer Planner::get()
 {
   ringBuffer c;
@@ -70,6 +90,9 @@ Planner::ringBuffer Planner::get()
   return c;
 }
 
+/**
+ * Return the intended X position.
+ */
 int Planner::getXPosition(void)
 {
 	if(count > 0 && tail < head && !bufferQueue[tail].busy){
@@ -79,6 +102,9 @@ int Planner::getXPosition(void)
 	}
 }
 
+/**
+ * Return the intended Y position.
+ */
 int Planner::getYPosition(void)
 {
 	if(count > 0 && tail < head && !bufferQueue[tail].busy){
@@ -88,6 +114,9 @@ int Planner::getYPosition(void)
 	}
 }
 
+/**
+ * Return the intended Z position.
+ */
 int Planner::getZPosition(void)
 {
 	if(count > 0 && tail < head && !bufferQueue[tail].busy){
@@ -97,6 +126,9 @@ int Planner::getZPosition(void)
 	}
 }
 
+/**
+ * Stores a new movement into the buffer.
+ */
 void Planner::put(int XPosition, int YPosition, int ZPosition)
 {
   if(count < RING_BUFFER_SIZE){
@@ -110,6 +142,9 @@ void Planner::put(int XPosition, int YPosition, int ZPosition)
   }
 }
 
+/**
+ * Helper function to increase a number by a given module.
+ */
 unsigned char Planner::modulo_inc(int operand, int modulo)
 {
   operand++;

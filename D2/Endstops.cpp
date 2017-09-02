@@ -38,7 +38,8 @@ void Endstops::init() {
 } // Endstops::init
 
 /**
- * Update the endstops bits from the pins
+ * Update the endstops bits from the pins.
+ * This function is called from the timer interrupt.
  */
 void Endstops::update(void) {
   

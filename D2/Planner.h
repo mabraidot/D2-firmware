@@ -26,7 +26,7 @@ class Planner
     void        put     (int XPosition, int YPosition, int ZPosition);
 
   private:
-    //ringBuffer bufferQueue[RING_BUFFER_SIZE];
+    ringBuffer bufferQueue[RING_BUFFER_SIZE];
     volatile unsigned char tail;
     volatile unsigned char head;
     volatile unsigned char count;
