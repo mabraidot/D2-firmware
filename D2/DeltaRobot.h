@@ -9,6 +9,10 @@ class DeltaRobot {
     DeltaRobot() {};
     void init(void);
     void run(void);
+
+    // delete. testing only
+    void stepper_rotate(int deg);
+    void stepper_choreography(int mode);
     
     typedef struct 
     {

@@ -10,6 +10,81 @@
 DeltaRobot delta;
 Planner plan = Planner();
 
+
+
+
+/**
+ * CAMBIAR POR NUEVA LIBRERIA STEPPER
+ */
+//#include <AccelStepper.h>
+#include <A4988.h>
+#include <SyncDriver.h>
+/*
+AccelStepper stepperA(AccelStepper::DRIVER, X_STEP_PIN, X_DIR_PIN);
+AccelStepper stepperB(AccelStepper::DRIVER, Y_STEP_PIN, Y_DIR_PIN);
+AccelStepper stepperC(AccelStepper::DRIVER, Z_STEP_PIN, Z_DIR_PIN);
+*/
+A4988 stepperA(400*6.2, X_DIR_PIN, X_STEP_PIN, X_ENABLE_PIN);
+A4988 stepperB(400*6.2, Y_DIR_PIN, Y_STEP_PIN, Y_ENABLE_PIN);
+A4988 stepperC(400*6.2, Z_DIR_PIN, Z_STEP_PIN, Z_ENABLE_PIN);
+SyncDriver motors(stepperA, stepperB, stepperC);
+void DeltaRobot::stepper_rotate(int deg){
+
+  /*stepperA.moveTo(deg);
+  stepperB.moveTo(deg);
+  stepperC.moveTo(deg);
+  */
+  if(deg > 0 && deg > 90){deg = 90;}
+  if(deg < 0 && deg < -90){deg = -90;}
+  motors.rotate(deg, deg, deg);
+}
+void DeltaRobot::stepper_choreography(int mode = 0){
+  if(mode == 0){
+    motors.rotate(-20, -20, -20);
+    motors.rotate(0, 0, 40);
+    motors.rotate(40, 0, -40);
+    motors.rotate(-40, 40, 0);
+    motors.rotate(0, -40, 40);
+    motors.rotate(0, 0, -40);
+  
+    motors.rotate(-40, -40, -40);
+    motors.rotate(0, 0, 20);
+    motors.rotate(20, 0, -20);
+    motors.rotate(-20, 20, 0);
+    motors.rotate(0, -20, 20);
+    motors.rotate(0, 0, -20);
+  
+    motors.rotate(60, 60, 60);
+  }
+  
+  if(mode == 1){
+    motors.rotate(-30, -30, -30);
+    
+    motors.rotate(10, 10, 30);
+    motors.rotate(-10, -10, -30);
+
+    motors.rotate(10, 30, 10);
+    motors.rotate(-10, -30, -10);
+
+    motors.rotate(30, 10, 10);
+    motors.rotate(-30, -10, -10);
+
+    motors.rotate(30, 30, 30);
+  }
+}
+/**
+ * FIN CAMBIAR POR NUEVA LIBRERIA STEPPER
+ */
+
+
+
+
+
+
+
+
+
+
 void DeltaRobot::init()
 {
   // @TODO: make a homing routine
@@ -24,6 +99,30 @@ void DeltaRobot::init()
   pinMode(Z_STEP_PIN, OUTPUT);
   pinMode(Z_DIR_PIN, OUTPUT);
   pinMode(Z_ENABLE_PIN, OUTPUT);
+
+
+  /**
+   * CAMBIAR POR NUEVA LIBRERIA STEPPER
+   */
+  /*
+  stepperA.setMaxSpeed(200.0);
+  stepperA.setAcceleration(100.0);
+  stepperB.setMaxSpeed(200.0);
+  stepperB.setAcceleration(100.0);
+  stepperC.setMaxSpeed(200.0);
+  stepperC.setAcceleration(100.0);
+  */
+  char rpm = 1400;
+  stepperA.begin(rpm,2);
+  stepperA.setSpeedProfile(LINEAR_SPEED, 3000, 2000);
+  stepperB.begin(rpm,2);
+  stepperB.setSpeedProfile(LINEAR_SPEED, 3000, 2000);
+  stepperC.begin(rpm,2);
+  stepperC.setSpeedProfile(LINEAR_SPEED, 3000, 2000);
+  /**
+   * FIN CAMBIAR POR NUEVA LIBRERIA STEPPER
+   */
+
 }
 
 void DeltaRobot::run()
