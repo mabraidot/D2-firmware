@@ -1,4 +1,7 @@
 #include "Planner.h";
+#include "Kinematics.h";
+
+Kinematics kinematics = Kinematics();
 
 Planner::Planner(void)
 {
@@ -30,7 +33,7 @@ Planner::Planner(void)
 void Planner::init (const bool clearBuffer)
 {
     if(clearBuffer){
-      memset (bufferQueue, 0, sizeof (*bufferQueue));
+      memset (bufferQueue, 0.00, sizeof (*bufferQueue));
     }
     tail = 0;
     head = 0;
@@ -69,6 +72,7 @@ void Planner::next(void)
   if(count > 0 && tail < head){
     bufferQueue[tail].busy = false;
     tail = modulo_inc(tail, RING_BUFFER_SIZE);
+    bufferQueue[tail].busy = true;
     --count;
   }
 }
@@ -81,7 +85,7 @@ Planner::ringBuffer Planner::get()
   ringBuffer c;
   if(count > 0 && tail < head && !bufferQueue[tail].busy){
 
-    bufferQueue[tail].busy = true;
+    //bufferQueue[tail].busy = true;
     c = bufferQueue[tail];
     
   }else{
@@ -181,6 +185,13 @@ void Planner::put(float XPosition, float YPosition, float ZPosition)
     bufferQueue[head].YPosition = YPosition;
     bufferQueue[head].ZPosition = ZPosition;
     bufferQueue[head].busy = false;
+    
+    kinematics.inverseKinematic(XPosition, YPosition, ZPosition);
+    if(kinematics.status == 0){
+      bufferQueue[head].XTheta = kinematics.theta1;
+      bufferQueue[head].YTheta = kinematics.theta2;
+      bufferQueue[head].ZTheta = kinematics.theta3;
+    }
     
     head = modulo_inc(head, RING_BUFFER_SIZE);
     ++count;
