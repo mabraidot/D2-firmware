@@ -6,10 +6,13 @@ Planner::Planner(void)
   // Structure to store the intended movement position.
   typedef struct
   {
-    bool busy;
-    int XPosition;
-    int YPosition;
-		int ZPosition;
+    bool    busy;
+    float   XPosition;
+    float   YPosition;
+		float   ZPosition;
+    float   getXTheta  (void);
+    float   getYTheta  (void);
+    float   getZTheta  (void);
   } ringBuffer;
 
   // Array of ringBuffer structures. Ring buffer design pattern.
@@ -82,10 +85,13 @@ Planner::ringBuffer Planner::get()
     c = bufferQueue[tail];
     
   }else{
-    c.XPosition = 0;
-    c.YPosition = 0;
-    c.ZPosition = 0;
-    c.busy = false;
+    c.XPosition = 0.00;
+    c.YPosition = 0.00;
+    c.ZPosition = 0.00;
+    c.XTheta    = 0.00;
+    c.YTheta    = 0.00;
+    c.ZTheta    = 0.00;
+    c.busy      = false;
   }
   return c;
 }
@@ -93,43 +99,82 @@ Planner::ringBuffer Planner::get()
 /**
  * Return the intended X position.
  */
-int Planner::getXPosition(void)
+float Planner::getXPosition(void)
 {
 	if(count > 0 && tail < head && !bufferQueue[tail].busy){
 		return bufferQueue[tail].XPosition;
 	}else{
-		return 0;
+		return 0.00;
 	}
 }
 
 /**
  * Return the intended Y position.
  */
-int Planner::getYPosition(void)
+float Planner::getYPosition(void)
 {
 	if(count > 0 && tail < head && !bufferQueue[tail].busy){
 		return bufferQueue[tail].YPosition;
 	}else{
-		return 0;
+		return 0.00;
 	}
 }
 
 /**
  * Return the intended Z position.
  */
-int Planner::getZPosition(void)
+float Planner::getZPosition(void)
 {
 	if(count > 0 && tail < head && !bufferQueue[tail].busy){
 		return bufferQueue[tail].ZPosition;
 	}else{
-		return 0;
+		return 0.00;
 	}
 }
 
 /**
+ * Return the intended X theta angle.
+ */
+float Planner::getXTheta(void)
+{
+  if(count > 0 && tail < head && !bufferQueue[tail].busy){
+    return bufferQueue[tail].XTheta;
+  }else{
+    return 0.00;
+  }
+}
+
+/**
+ * Return the intended Y theta angle.
+ */
+float Planner::getYTheta(void)
+{
+  if(count > 0 && tail < head && !bufferQueue[tail].busy){
+    return bufferQueue[tail].YTheta;
+  }else{
+    return 0.00;
+  }
+}
+
+
+/**
+ * Return the intended Z theta angle.
+ */
+float Planner::getZTheta(void)
+{
+  if(count > 0 && tail < head && !bufferQueue[tail].busy){
+    return bufferQueue[tail].ZTheta;
+  }else{
+    return 0.00;
+  }
+}
+
+
+
+/**
  * Stores a new movement into the buffer.
  */
-void Planner::put(int XPosition, int YPosition, int ZPosition)
+void Planner::put(float XPosition, float YPosition, float ZPosition)
 {
   if(count < RING_BUFFER_SIZE){
     bufferQueue[head].XPosition = XPosition;

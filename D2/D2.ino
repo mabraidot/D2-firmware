@@ -1,8 +1,8 @@
 #include "Arduino.h"
 #include "Configurations.h"
-
 #include "Debug.h"
-#include "Endstops.h"
+#include "DeltaRobot.h"
+
 //#include <AccelStepper.h>
 #include <A4988.h>
 #include <SyncDriver.h>
@@ -19,17 +19,9 @@ SyncDriver motors(stepperA, stepperB, stepperC);
 
 void setup() {
   Serial.begin(250000);
-  endstops.init();
-
-  pinMode(X_STEP_PIN, OUTPUT);
-  pinMode(X_DIR_PIN, OUTPUT);
-  pinMode(X_ENABLE_PIN, OUTPUT);
-  pinMode(Y_STEP_PIN, OUTPUT);
-  pinMode(Y_DIR_PIN, OUTPUT);
-  pinMode(Y_ENABLE_PIN, OUTPUT);
-  pinMode(Z_STEP_PIN, OUTPUT);
-  pinMode(Z_DIR_PIN, OUTPUT);
-  pinMode(Z_ENABLE_PIN, OUTPUT);
+  
+  delta.init();
+  
   /*
   stepperA.setMaxSpeed(200.0);
   stepperA.setAcceleration(100.0);
@@ -57,7 +49,6 @@ void loop() {
   
   if (Serial.available()) process_serial();
 }
-
 
 void stepper_rotate(int deg){
 

@@ -5,6 +5,7 @@
 #include "Configurations.h"
 #include "Debug.h"
 #include "Endstops.h"
+#include "DeltaRobot.h"
 #include <TimerOne.h>
 
 // Timer1 interrupt
@@ -42,13 +43,14 @@ void Endstops::init() {
  * This function is called from the timer interrupt.
  */
 void Endstops::update(void) {
+
+  _A_Hit = _B_Hit = _C_Hit = 1;
   
   static uint16_t stateA = 0; // current debounce status
   stateA = (stateA << 1) | !digitalRead(X_MIN_PIN) | 0xe000;
   if(stateA == 0xf000){
     _A_Hit = 1;   // endstop has hit
     debug.print("Endstop A has hit.", 1);
-    
   }
 
   static uint16_t stateB = 0; // current debounce status

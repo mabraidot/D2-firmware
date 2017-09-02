@@ -8,10 +8,10 @@ Kinematics::Kinematics(void)
   // private:
   
   /* Robot geometry */
-  const float _e       = 115.0;  // end effector to wrist
-  const float _f       = 457.3;  // base to shoulder
-  const float _re      = 232.0;  // forearm
-  const float _rf      = 112.0;  // arm
+  const float _e       = DELTA_E;  // end effector to wrist
+  const float _f       = DELTA_F;  // base to shoulder
+  const float _re      = DELTA_RE; // forearm
+  const float _rf      = DELTA_RF; // arm
 
   /* Trigonometric constants */
   const float _sqrt3   = sqrt(3.0);

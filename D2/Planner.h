@@ -6,10 +6,13 @@ class Planner
   public:
     typedef struct
     {
-      bool busy;
-      int XPosition;
-      int YPosition;
-			int ZPosition;
+      bool    busy;
+      float   XPosition;
+      float   YPosition;
+      float   ZPosition;
+      float   XTheta;
+      float   YTheta;
+      float   ZTheta;
     } ringBuffer;
     
     Planner(void);
@@ -18,12 +21,15 @@ class Planner
 		int         isBusy	(void);    
 		int         isEmpty (void);
     int         isFull  (void);
-    int         getXPosition  (void);
-    int         getYPosition  (void);
-    int         getZPosition  (void);
+    float       getXPosition  (void);
+    float       getYPosition  (void);
+    float       getZPosition  (void);
+    float       getXTheta  (void);
+    float       getYTheta  (void);
+    float       getZTheta  (void);
     ringBuffer  get     (void);
     void        next    (void);
-    void        put     (int XPosition, int YPosition, int ZPosition);
+    void        put     (float XPosition, float YPosition, float ZPosition);
 
   private:
     ringBuffer bufferQueue[RING_BUFFER_SIZE];
