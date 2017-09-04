@@ -15,7 +15,7 @@ class Planner
       float   ZTheta;
     } ringBuffer;
     
-    Planner(void);
+    Planner(){};
 
     void        init    (const bool clearBuffer);
 		int         isBusy	(void);    
@@ -30,13 +30,13 @@ class Planner
     ringBuffer  get     (void);
     void        next    (void);
     void        put     (float XPosition, float YPosition, float ZPosition);
-
+    ringBuffer  bufferQueue[RING_BUFFER_SIZE];
+    
   private:
-    ringBuffer bufferQueue[RING_BUFFER_SIZE];
     volatile unsigned char tail;
     volatile unsigned char head;
     volatile unsigned char count;
     unsigned char modulo_inc(int operand, int modulo);  
 };
 
-
+extern Planner plan;

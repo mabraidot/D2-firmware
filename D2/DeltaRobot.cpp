@@ -8,7 +8,6 @@
 #include "Planner.h"
 
 DeltaRobot delta;
-Planner plan = Planner();
 
 
 
@@ -29,7 +28,6 @@ A4988 stepperB(400*6.2, Y_DIR_PIN, Y_STEP_PIN, Y_ENABLE_PIN);
 A4988 stepperC(400*6.2, Z_DIR_PIN, Z_STEP_PIN, Z_ENABLE_PIN);
 SyncDriver motors(stepperA, stepperB, stepperC);
 void DeltaRobot::stepper_rotate(int deg){
-
   /*stepperA.moveTo(deg);
   stepperB.moveTo(deg);
   stepperC.moveTo(deg);
@@ -84,11 +82,16 @@ void DeltaRobot::stepper_choreography(int mode = 0){
 
 
 
-
+    
 void DeltaRobot::init()
 {
   // @TODO: make a homing routine
   endstops.init();
+  plan.init(true);
+  for(int i = 0; i < 3; i++){
+    arms[i].position = 90.0;
+    arms[i].homed = 1;
+  }
   
   pinMode(X_STEP_PIN, OUTPUT);
   pinMode(X_DIR_PIN, OUTPUT);
@@ -97,7 +100,7 @@ void DeltaRobot::init()
   pinMode(Y_DIR_PIN, OUTPUT);
   pinMode(Y_ENABLE_PIN, OUTPUT);
   pinMode(Z_STEP_PIN, OUTPUT);
-  pinMode(Z_DIR_PIN, OUTPUT);
+  pinMode(Z_DIR_PIN, OUTPUT); 
   pinMode(Z_ENABLE_PIN, OUTPUT);
 
 
@@ -142,10 +145,18 @@ void DeltaRobot::run()
   if(!plan.isEmpty()){
     
     if(plan.isBusy()){
-      // restar de la posicion actual y mover los motores a los angulos calculados
-      /*plan.getXTheta();
-      plan.getYTheta();
-      plan.getZTheta();*/
+      float xtheta = plan.getXTheta() - arms[0].position;
+      float ytheta = plan.getYTheta() - arms[1].position;
+      float ztheta = plan.getZTheta() - arms[2].position;
+      
+      motors.rotate(xtheta, ytheta, ztheta);
+      
+      plan.next();
+
+      // Update arm positions after motors have finished rotating
+      arms[0].position += xtheta;
+      arms[1].position += xtheta;
+      arms[2].position += xtheta;
     }
     
     // Si los motores terminaron el comando, liberar el planner 

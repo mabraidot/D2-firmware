@@ -1,9 +1,10 @@
 #include "Planner.h";
 #include "Kinematics.h";
 
+Planner plan;
 Kinematics kinematics = Kinematics();
 
-Planner::Planner(void)
+/*Planner::Planner(void)
 {
 
   // Structure to store the intended movement position.
@@ -25,7 +26,7 @@ Planner::Planner(void)
   volatile unsigned char count;
   
   init(true);
-}
+}*/
 
 /**
  * Initializes the buffer variables with zeros.
@@ -83,7 +84,8 @@ void Planner::next(void)
 Planner::ringBuffer Planner::get()
 {
   ringBuffer c;
-  if(count > 0 && tail < head && !bufferQueue[tail].busy){
+  //if(count > 0 && tail < head && !bufferQueue[tail].busy){
+  if(count > 0 && tail < head){
 
     //bufferQueue[tail].busy = true;
     c = bufferQueue[tail];
@@ -105,7 +107,7 @@ Planner::ringBuffer Planner::get()
  */
 float Planner::getXPosition(void)
 {
-	if(count > 0 && tail < head && !bufferQueue[tail].busy){
+	if(count > 0 && tail < head){
 		return bufferQueue[tail].XPosition;
 	}else{
 		return 0.00;
@@ -117,7 +119,7 @@ float Planner::getXPosition(void)
  */
 float Planner::getYPosition(void)
 {
-	if(count > 0 && tail < head && !bufferQueue[tail].busy){
+	if(count > 0 && tail < head){
 		return bufferQueue[tail].YPosition;
 	}else{
 		return 0.00;
@@ -129,7 +131,7 @@ float Planner::getYPosition(void)
  */
 float Planner::getZPosition(void)
 {
-	if(count > 0 && tail < head && !bufferQueue[tail].busy){
+	if(count > 0 && tail < head){
 		return bufferQueue[tail].ZPosition;
 	}else{
 		return 0.00;
@@ -141,7 +143,7 @@ float Planner::getZPosition(void)
  */
 float Planner::getXTheta(void)
 {
-  if(count > 0 && tail < head && !bufferQueue[tail].busy){
+  if(count > 0 && tail < head){
     return bufferQueue[tail].XTheta;
   }else{
     return 0.00;
@@ -153,7 +155,7 @@ float Planner::getXTheta(void)
  */
 float Planner::getYTheta(void)
 {
-  if(count > 0 && tail < head && !bufferQueue[tail].busy){
+  if(count > 0 && tail < head){
     return bufferQueue[tail].YTheta;
   }else{
     return 0.00;
@@ -166,7 +168,7 @@ float Planner::getYTheta(void)
  */
 float Planner::getZTheta(void)
 {
-  if(count > 0 && tail < head && !bufferQueue[tail].busy){
+  if(count > 0 && tail < head){
     return bufferQueue[tail].ZTheta;
   }else{
     return 0.00;
@@ -184,9 +186,23 @@ void Planner::put(float XPosition, float YPosition, float ZPosition)
     bufferQueue[head].XPosition = XPosition;
     bufferQueue[head].YPosition = YPosition;
     bufferQueue[head].ZPosition = ZPosition;
-    bufferQueue[head].busy = false;
+    bufferQueue[head].busy = (head == tail) ? true : false;
     
     kinematics.inverseKinematic(XPosition, YPosition, ZPosition);
+    Serial.println("Positions ----------------------------> ");
+    Serial.println(XPosition);
+    Serial.println(YPosition);
+    Serial.println(ZPosition);
+    Serial.print("Status ----------------------------> ");
+    Serial.println(kinematics.status);
+    Serial.println(kinematics.theta1);
+    Serial.println(kinematics.theta2);
+    Serial.println(kinematics.theta3);
+    
+    //bufferQueue[head].XTheta = 80.0;
+    //bufferQueue[head].YTheta = 80.0;
+    //bufferQueue[head].ZTheta = 80.0;
+    
     if(kinematics.status == 0){
       bufferQueue[head].XTheta = kinematics.theta1;
       bufferQueue[head].YTheta = kinematics.theta2;

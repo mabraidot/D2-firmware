@@ -1,29 +1,10 @@
 #include "Kinematics.h";
-
-#include "Configurations.h"
 #include "Debug.h"
 
 Kinematics::Kinematics(void)
 {
-  // private:
-  
-  /* Robot geometry */
-  const float _e       = DELTA_E;  // end effector to wrist
-  const float _f       = DELTA_F;  // base to shoulder
-  const float _re      = DELTA_RE; // forearm
-  const float _rf      = DELTA_RF; // arm
-
-  /* Trigonometric constants */
-  const float _sqrt3   = sqrt(3.0);
-  const float _pi      = 3.141592653;
-  const float _sin120  = _sqrt3/2.0;   
-  const float _cos120  = -0.5;        
-  const float _tan60   = _sqrt3;
-  const float _sin30   = 0.5;
-  const float _tan30   = 1/_sqrt3;
-
   // public:
-  char status          = -1;
+  int status          = -1;
   float x              = 0;
   float y              = 0;
   float z              = 0;
@@ -96,7 +77,7 @@ int Kinematics::forwardKinematic(float theta1, float theta2, float theta3)
  * Helper function, calculates angle theta (for YZ-pane).
  * Returns status: 0 = OK, -1 = non-existing position.
  */
-char Kinematics::_delta_calcAngleYZ(float x0, float y0, float z0, float &theta)
+int Kinematics::_delta_calcAngleYZ(float x0, float y0, float z0, float &theta)
 {
   float y1 = -0.5 * 0.57735 * _f;  // f/2 * tg 30
   y0 -= 0.5 * 0.57735 * _e;        // shift center to edge
@@ -107,6 +88,7 @@ char Kinematics::_delta_calcAngleYZ(float x0, float y0, float z0, float &theta)
   
   // discriminant
   float d = -(a+b*y1)*(a+b*y1)+_rf*(b*b*_rf+_rf); 
+  
   if (d < 0) return -1;           // non-existing point
   
   float yj = (y1 - a*b - sqrt(d))/(b*b + 1); // choosing outer point
@@ -125,7 +107,7 @@ char Kinematics::_delta_calcAngleYZ(float x0, float y0, float z0, float &theta)
 int Kinematics::inverseKinematic(float x0, float y0, float z0)
 {
   theta1 = theta2 = theta3 = 0;
-  int status = _delta_calcAngleYZ(x0, y0, z0, theta1);
+  status = _delta_calcAngleYZ(x0, y0, z0, theta1);
   if (status == 0) status = _delta_calcAngleYZ(x0*_cos120 + y0*_sin120, y0*_cos120-x0*_sin120, z0, theta2);  // rotate coords to +120 deg
   if (status == 0) status = _delta_calcAngleYZ(x0*_cos120 - y0*_sin120, y0*_cos120+x0*_sin120, z0, theta3);  // rotate coords to -120 deg
   

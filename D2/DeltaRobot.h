@@ -6,7 +6,13 @@
 class DeltaRobot {
 
   public:
-    DeltaRobot() {};
+    DeltaRobot(){};
+    typedef struct 
+    {
+      float position;
+      byte homed;
+    } arm;
+    
     void init(void);
     void run(void);
 
@@ -14,11 +20,6 @@ class DeltaRobot {
     void stepper_rotate(int deg);
     void stepper_choreography(int mode);
     
-    typedef struct 
-    {
-      float position;
-      byte homed;
-    } arm;
 
   private:
     arm arms[3];
