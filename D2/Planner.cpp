@@ -183,34 +183,31 @@ float Planner::getZTheta(void)
 void Planner::put(float XPosition, float YPosition, float ZPosition)
 {
   if(count < RING_BUFFER_SIZE){
-    bufferQueue[head].XPosition = XPosition;
-    bufferQueue[head].YPosition = YPosition;
-    bufferQueue[head].ZPosition = ZPosition;
-    bufferQueue[head].busy = (head == tail) ? true : false;
-    
+
     kinematics.inverseKinematic(XPosition, YPosition, ZPosition);
     Serial.println("Positions ----------------------------> ");
     Serial.println(XPosition);
     Serial.println(YPosition);
     Serial.println(ZPosition);
-    Serial.print("Status ----------------------------> ");
-    Serial.println(kinematics.status);
+    Serial.println("IK Theta ----------------------------> ");
     Serial.println(kinematics.theta1);
     Serial.println(kinematics.theta2);
     Serial.println(kinematics.theta3);
-    
-    //bufferQueue[head].XTheta = 80.0;
-    //bufferQueue[head].YTheta = 80.0;
-    //bufferQueue[head].ZTheta = 80.0;
-    
+    // If intended movement is possible
     if(kinematics.status == 0){
+      
+      bufferQueue[head].XPosition = XPosition;
+      bufferQueue[head].YPosition = YPosition;
+      bufferQueue[head].ZPosition = ZPosition;
+      bufferQueue[head].busy = (head == tail) ? true : false;
+    
       bufferQueue[head].XTheta = kinematics.theta1;
       bufferQueue[head].YTheta = kinematics.theta2;
       bufferQueue[head].ZTheta = kinematics.theta3;
+
+      head = modulo_inc(head, RING_BUFFER_SIZE);
+      ++count;
     }
-    
-    head = modulo_inc(head, RING_BUFFER_SIZE);
-    ++count;
   }
 }
 

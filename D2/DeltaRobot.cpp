@@ -148,15 +148,30 @@ void DeltaRobot::run()
       float xtheta = plan.getXTheta() - arms[0].position;
       float ytheta = plan.getYTheta() - arms[1].position;
       float ztheta = plan.getZTheta() - arms[2].position;
-      
+
+      Serial.println("Prev Position ----------------------------> ");
+      Serial.println(arms[0].position);
+      Serial.println(arms[1].position);
+      Serial.println(arms[2].position);
+      Serial.println("New Theta ----------------------------> ");
+      Serial.println(xtheta);
+      Serial.println(ytheta);
+      Serial.println(ztheta);
+    
       motors.rotate(xtheta, ytheta, ztheta);
       
       plan.next();
 
       // Update arm positions after motors have finished rotating
       arms[0].position += xtheta;
-      arms[1].position += xtheta;
-      arms[2].position += xtheta;
+      arms[1].position += ytheta;
+      arms[2].position += ztheta;
+
+      Serial.println("New Position ----------------------------> ");
+      Serial.println(arms[0].position);
+      Serial.println(arms[1].position);
+      Serial.println(arms[2].position);
+      
     }
     
     // Si los motores terminaron el comando, liberar el planner 

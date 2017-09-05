@@ -40,7 +40,13 @@ void process_serial(){
     case 'C': delta.stepper_choreography(0); break;
     case 'P': delta.stepper_choreography(1); break;
 
-    case 'K': float pos = Serial.parseFloat(); plan.put(pos, pos, -pos); break;
+    //case 'K': float pos = Serial.parseFloat(); plan.put(pos/10, pos/10, -pos*10); break;
+    case 'K': 
+      float pos1 = Serial.parseFloat(); 
+      float pos2 = Serial.parseFloat(); 
+      float pos3 = Serial.parseFloat(); 
+      plan.put(pos1, pos2, pos3); 
+      break;
     
   }
   
@@ -57,5 +63,5 @@ void help() {
   Serial.println(F("B123: sets the target rotation for the motor to 123 degrees, Backward"));
   Serial.println(F("C: Little choreography"));
   Serial.println(F("P: P&P choreography"));
-  Serial.println(F("K123: Inverse Kinematics (X,Y,Z) -> (123,123,123)"));
+  Serial.println(F("K1,2,-3: Inverse Kinematics (X,Y,Z) -> (1,2,-3)"));
 }
