@@ -93,7 +93,7 @@ int Kinematics::_delta_calcAngleYZ(float x0, float y0, float z0, float &theta)
   
   float yj = (y1 - a*b - sqrt(d))/(b*b + 1); // choosing outer point
   float zj = a + b*yj;
-  theta = 180.0*atan(-zj/(y1 - yj))/_pi + ((yj>y1)?180.0:0.0);
+  theta = (180.0 * atan(-zj/(y1 - yj)) / _pi) + ((yj>y1) ? 180.0 : 0.0);
   
   return 0;
 }
@@ -108,8 +108,8 @@ int Kinematics::inverseKinematic(float x0, float y0, float z0)
 {
   theta1 = theta2 = theta3 = 0;
   status = _delta_calcAngleYZ(x0, y0, z0, theta1);
-  if (status == 0) status = _delta_calcAngleYZ(x0*_cos120 + y0*_sin120, y0*_cos120-x0*_sin120, z0, theta2);  // rotate coords to +120 deg
-  if (status == 0) status = _delta_calcAngleYZ(x0*_cos120 - y0*_sin120, y0*_cos120+x0*_sin120, z0, theta3);  // rotate coords to -120 deg
+  if (status == 0) status = _delta_calcAngleYZ(x0*_cos120 + y0*_sin120, y0*_cos120 - x0*_sin120, z0, theta2);  // rotate coords to +120 deg
+  if (status == 0) status = _delta_calcAngleYZ(x0*_cos120 - y0*_sin120, y0*_cos120 + x0*_sin120, z0, theta3);  // rotate coords to -120 deg
   
   return status;
 }

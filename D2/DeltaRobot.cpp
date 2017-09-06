@@ -149,7 +149,7 @@ void DeltaRobot::run()
       float ytheta = plan.getYTheta() - arms[1].position;
       float ztheta = plan.getZTheta() - arms[2].position;
 
-      debug.println("Prev Position ----------------------------> ");
+      /*debug.println("Prev Position ----------------------------> ");
       debug.println((String)arms[0].position);
       debug.println((String)arms[1].position);
       debug.println((String)arms[2].position);
@@ -157,7 +157,7 @@ void DeltaRobot::run()
       debug.println((String)xtheta);
       debug.println((String)ytheta);
       debug.println((String)ztheta);
-    
+      */
       motors.rotate(xtheta, ytheta, ztheta);
       
       plan.next();
@@ -167,11 +167,11 @@ void DeltaRobot::run()
       arms[1].position += ytheta;
       arms[2].position += ztheta;
 
-      debug.println("New Position ----------------------------> ");
+      /*debug.println("New Position ----------------------------> ");
       debug.println((String)arms[0].position);
       debug.println((String)arms[1].position);
       debug.println((String)arms[2].position);
-      
+      */
     }
     
     // Si los motores terminaron el comando, liberar el planner 
