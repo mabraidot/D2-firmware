@@ -19,10 +19,10 @@
 
 
 /** ROBOT GEOMETRY  **/
-#define DELTA_E             57.15  // end effector to wrist
-#define DELTA_F             121.24  // base to shoulder
-#define DELTA_RE            103.0  // forearm
-#define DELTA_RF            331.3  // arm
+#define DELTA_E             33.00  // end effector to wrist radius
+#define DELTA_F             70.00  // base to shoulder radius
+#define DELTA_RE            331.30 // forearm length
+#define DELTA_RF            121.20  // arm length
 
 /** GENERAL CONFIGURATIONS  **/
 #define DEBUG              true
