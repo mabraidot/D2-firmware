@@ -12,4 +12,10 @@ void Debug::print(String message, bool eol=false){
     }
   }
 }
+void Debug::print(String message){
+  print(message, false);
+}
 
+void Debug::println(String message){
+  print(message, true);
+}

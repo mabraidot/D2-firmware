@@ -1,3 +1,4 @@
+#include "Debug.h";
 #include "Planner.h";
 #include "Kinematics.h";
 
@@ -185,14 +186,16 @@ void Planner::put(float XPosition, float YPosition, float ZPosition)
   if(count < RING_BUFFER_SIZE){
 
     kinematics.inverseKinematic(XPosition, YPosition, ZPosition);
-    Serial.println("Positions ----------------------------> ");
-    Serial.println(XPosition);
-    Serial.println(YPosition);
-    Serial.println(ZPosition);
-    Serial.println("IK Theta ----------------------------> ");
-    Serial.println(kinematics.theta1);
-    Serial.println(kinematics.theta2);
-    Serial.println(kinematics.theta3);
+    
+    debug.println("Positions ----------------------------> ");
+    debug.println((String)XPosition);
+    debug.println((String)YPosition);
+    debug.println((String)ZPosition);
+    debug.println("IK Theta ----------------------------> ");
+    debug.println((String)kinematics.theta1);
+    debug.println((String)kinematics.theta2);
+    debug.println((String)kinematics.theta3);
+    
     // If intended movement is possible
     if(kinematics.status == 0){
       

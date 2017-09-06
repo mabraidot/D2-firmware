@@ -10,6 +10,8 @@ class Debug {
     Debug() {};
 
     void print(String message, bool eol);
+    void print(String message);
+    void println(String message);
 
 
 };

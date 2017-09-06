@@ -149,14 +149,14 @@ void DeltaRobot::run()
       float ytheta = plan.getYTheta() - arms[1].position;
       float ztheta = plan.getZTheta() - arms[2].position;
 
-      Serial.println("Prev Position ----------------------------> ");
-      Serial.println(arms[0].position);
-      Serial.println(arms[1].position);
-      Serial.println(arms[2].position);
-      Serial.println("New Theta ----------------------------> ");
-      Serial.println(xtheta);
-      Serial.println(ytheta);
-      Serial.println(ztheta);
+      debug.println("Prev Position ----------------------------> ");
+      debug.println((String)arms[0].position);
+      debug.println((String)arms[1].position);
+      debug.println((String)arms[2].position);
+      debug.println("New Theta ----------------------------> ");
+      debug.println((String)xtheta);
+      debug.println((String)ytheta);
+      debug.println((String)ztheta);
     
       motors.rotate(xtheta, ytheta, ztheta);
       
@@ -167,10 +167,10 @@ void DeltaRobot::run()
       arms[1].position += ytheta;
       arms[2].position += ztheta;
 
-      Serial.println("New Position ----------------------------> ");
-      Serial.println(arms[0].position);
-      Serial.println(arms[1].position);
-      Serial.println(arms[2].position);
+      debug.println("New Position ----------------------------> ");
+      debug.println((String)arms[0].position);
+      debug.println((String)arms[1].position);
+      debug.println((String)arms[2].position);
       
     }
     
