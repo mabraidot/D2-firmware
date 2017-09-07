@@ -17,7 +17,6 @@ class DeltaRobot {
     void run(void);
 
     // delete. testing only
-    void stepper_rotate(int deg);
     void stepper_choreography(int mode);
     
 

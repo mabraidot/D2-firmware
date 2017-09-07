@@ -27,47 +27,27 @@ A4988 stepperA(400*6.2, X_DIR_PIN, X_STEP_PIN, X_ENABLE_PIN);
 A4988 stepperB(400*6.2, Y_DIR_PIN, Y_STEP_PIN, Y_ENABLE_PIN);
 A4988 stepperC(400*6.2, Z_DIR_PIN, Z_STEP_PIN, Z_ENABLE_PIN);
 SyncDriver motors(stepperA, stepperB, stepperC);
-void DeltaRobot::stepper_rotate(int deg){
-  /*stepperA.moveTo(deg);
-  stepperB.moveTo(deg);
-  stepperC.moveTo(deg);
-  */
-  if(deg > 0 && deg > 90){deg = 90;}
-  if(deg < 0 && deg < -90){deg = -90;}
-  motors.rotate(deg, deg, deg);
-}
+
 void DeltaRobot::stepper_choreography(int mode = 0){
   if(mode == 0){
-    motors.rotate(-20, -20, -20);
-    motors.rotate(0, 0, 40);
-    motors.rotate(40, 0, -40);
-    motors.rotate(-40, 40, 0);
-    motors.rotate(0, -40, 40);
-    motors.rotate(0, 0, -40);
-  
-    motors.rotate(-40, -40, -40);
-    motors.rotate(0, 0, 20);
-    motors.rotate(20, 0, -20);
-    motors.rotate(-20, 20, 0);
-    motors.rotate(0, -20, 20);
-    motors.rotate(0, 0, -20);
-  
-    motors.rotate(60, 60, 60);
+    static int i = 0;
+    while(i<360){
+      plan.put(80*cos(i), 80*sin(i), -300);
+      i += 6;
+    }
+    plan.put(0, 0, -300);
   }
   
   if(mode == 1){
-    motors.rotate(-30, -30, -30);
-    
-    motors.rotate(10, 10, 30);
-    motors.rotate(-10, -10, -30);
-
-    motors.rotate(10, 30, 10);
-    motors.rotate(-10, -30, -10);
-
-    motors.rotate(30, 10, 10);
-    motors.rotate(-30, -10, -10);
-
-    motors.rotate(30, 30, 30);
+    static int j = 0;
+    while(j<4){
+      plan.put(0, 0, -250);
+      plan.put(80, 80, -330);
+      plan.put(0, 0, -250);
+      plan.put(-80, -80, -330);
+      j++;
+    }
+    plan.put(0, 0, -300);
   }
 }
 /**
@@ -89,7 +69,7 @@ void DeltaRobot::init()
   endstops.init();
   plan.init(true);
   for(int i = 0; i < 3; i++){
-    arms[i].position = 90.0;
+    arms[i].position = 0.00;
     arms[i].homed = 1;
   }
   
