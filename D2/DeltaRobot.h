@@ -9,7 +9,7 @@ class DeltaRobot {
     DeltaRobot(){};
     typedef struct 
     {
-      float position;
+      long position;
       byte homed;
     } arm;
     
