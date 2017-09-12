@@ -17,7 +17,7 @@ AccelStepper stepperA(AccelStepper::DRIVER, X_STEP_PIN, X_DIR_PIN);
 AccelStepper stepperB(AccelStepper::DRIVER, Y_STEP_PIN, Y_DIR_PIN);
 AccelStepper stepperC(AccelStepper::DRIVER, Z_STEP_PIN, Z_DIR_PIN);
 
-float xtheta,  ytheta,  ztheta = 0;
+long xsteps,  ysteps,  zsteps = 0;
 
 
 // @TODO: remove this!, it is only for demonstration purpose
@@ -68,7 +68,7 @@ void DeltaRobot::init()
   pinMode(Y_STEP_PIN, OUTPUT);
   pinMode(Y_DIR_PIN, OUTPUT);
   pinMode(Y_ENABLE_PIN, OUTPUT);
-  pinMode(Z_STEP_PIN, OUTPUT);
+  pinMode(Z_STEP_PIN, OUTPUT);  
   pinMode(Z_DIR_PIN, OUTPUT); 
   pinMode(Z_ENABLE_PIN, OUTPUT);
   
@@ -118,9 +118,9 @@ void DeltaRobot::run()
       debug.println((String)arms[1].position);
       debug.println((String)arms[2].position);
       debug.println("New Theta ----------------------------> ");
-      debug.println((String)xtheta);
-      debug.println((String)ytheta);
-      debug.println((String)ztheta);
+      debug.println((String)plan.getXTheta());
+      debug.println((String)plan.getYTheta());
+      debug.println((String)plan.getZTheta());
       debug.println("Steps to move ----------------------------> ");
       debug.println((String)xsteps);
       debug.println((String)ysteps);

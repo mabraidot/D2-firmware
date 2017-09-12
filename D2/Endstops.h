@@ -18,9 +18,7 @@ class Endstops {
 
   private:
 
-    static byte _A_Hit, 
-                _B_Hit, 
-                _C_Hit;
+    static byte _A_Hit, _B_Hit, _C_Hit;
 
 };
 

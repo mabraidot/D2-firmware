@@ -24,6 +24,9 @@
             "includePath": [
                 "/usr/include",
                 "/usr/local/include",
+                "/opt/arduino-1.8.4/libraries",
+                "/opt/arduino-1.8.4/libraries/AccelStepper",
+                "/opt/arduino-1.8.4/hardware/arduino/avr/cores/arduino",
                 "${workspaceRoot}"
             ],
             "defines": [],
@@ -32,6 +35,9 @@
                 "path": [
                     "/usr/include",
                     "/usr/local/include",
+                    "/opt/arduino-1.8.4/libraries",
+                    "/opt/arduino-1.8.4/libraries/AccelStepper",
+                    "/opt/arduino-1.8.4/hardware/arduino/avr/cores/arduino",
                     "${workspaceRoot}"
                 ],
                 "limitSymbolsToIncludedHeaders": true,

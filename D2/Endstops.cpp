@@ -17,13 +17,13 @@ void endstops_interrupt(void){
 
 Endstops endstops;
 
-
 // public:
 /**
  * Class and Instance Methods
  */
 void Endstops::init() {
 
+  _A_Hit, _B_Hit, _C_Hit = 0;
   Timer1.initialize(50);
   Timer1.attachInterrupt( endstops_interrupt );
   
@@ -67,16 +67,3 @@ void Endstops::update(void) {
     debug.print("Endstop C has hit.", 1);
   }
 }
-
-
-
-
-
-
-// private:
-static byte Endstops::_A_Hit = 0,
-            Endstops::_B_Hit = 0,
-            Endstops::_C_Hit = 0;
-
-
-
