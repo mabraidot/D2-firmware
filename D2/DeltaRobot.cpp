@@ -16,9 +16,9 @@ DeltaRobot delta;
  * CAMBIAR POR NUEVA LIBRERIA STEPPER
  */
 #include <AccelStepper.h>
-AccelStepper stepperA(AccelStepper::FULL2WIRE, X_STEP_PIN, X_DIR_PIN);
-AccelStepper stepperB(AccelStepper::FULL2WIRE, Y_STEP_PIN, Y_DIR_PIN);
-AccelStepper stepperC(AccelStepper::FULL2WIRE, Z_STEP_PIN, Z_DIR_PIN);
+AccelStepper stepperA(AccelStepper::DRIVER, X_STEP_PIN, X_DIR_PIN);
+AccelStepper stepperB(AccelStepper::DRIVER, Y_STEP_PIN, Y_DIR_PIN);
+AccelStepper stepperC(AccelStepper::DRIVER, Z_STEP_PIN, Z_DIR_PIN);
 float xtheta,  ytheta,  ztheta = 0;
 long xsteps,  ysteps,  zsteps = 0;
 
@@ -89,16 +89,19 @@ void DeltaRobot::init()
    * CAMBIAR POR NUEVA LIBRERIA STEPPER
    */
   //stepperA.setEnablePin(X_ENABLE_PIN);
-  stepperA.setMaxSpeed(500.0);
-  stepperA.setAcceleration(100.0);
+  stepperA.setMaxSpeed(5000.0);
+  stepperA.setAcceleration(1000);
+  stepperA.setSpeed(2500.0);
 
   //stepperB.setEnablePin(Y_ENABLE_PIN);
-  stepperB.setMaxSpeed(500.0);
-  stepperB.setAcceleration(100.0);
+  stepperB.setMaxSpeed(5000.0);
+  stepperB.setAcceleration(1000);
+  stepperB.setSpeed(2500.0);
 
   //stepperC.setEnablePin(Z_ENABLE_PIN);
-  stepperC.setMaxSpeed(500.0);
-  stepperC.setAcceleration(100.0);
+  stepperC.setMaxSpeed(5000.0);
+  stepperC.setAcceleration(1000);
+  stepperC.setSpeed(2500.0);
   /*
   char rpm = 1400;
   stepperA.begin(rpm,2);
@@ -131,13 +134,14 @@ void DeltaRobot::run()
   if(!plan.isEmpty()){
     
     if(!plan.isBusy()){
+
       xtheta = plan.getXTheta() - arms[0].position;
       ytheta = plan.getYTheta() - arms[1].position;
       ztheta = plan.getZTheta() - arms[2].position;
 
-      xsteps = (long) round( ( xtheta * 800 * 6.8 ) / 360 );
-      ysteps = (long) round( ( ytheta * 800 * 6.8 ) / 360 );
-      zsteps = (long) round( ( ztheta * 800 * 6.8 ) / 360 );
+      xsteps = (long) round( ( xtheta * 800 ) / 360 * 6.8 );
+      ysteps = (long) round( ( ytheta * 800 ) / 360 * 6.8 );
+      zsteps = (long) round( ( ztheta * 800 ) / 360 * 6.8 );
  
       /*debug.println("Prev Position ----------------------------> ");
       debug.println((String)arms[0].position);
@@ -171,28 +175,15 @@ void DeltaRobot::run()
     
   }
   // iniciar o parar los motores
-  if(stepperA.distanceToGo() == 0){
-    //stepperA.stop();
-  }else{
-    stepperA.run();
-  }
-  if(stepperB.distanceToGo() == 0){
-    //stepperB.stop();
-  }else{
-    stepperB.run();
-  }
-  if(stepperC.distanceToGo() == 0){
-    //stepperC.stop();
-  }else{
-    stepperC.run();
-  }
+  stepperA.run();
+  stepperB.run();
+  stepperC.run();
 
 
   // Si los motores terminaron el comando, liberar el planner 
   // para poder tomar otro comando
   if (stepperA.distanceToGo() == 0 && stepperB.distanceToGo() == 0 && stepperC.distanceToGo() == 0) {
     plan.next();
-    
   }
 }
 
