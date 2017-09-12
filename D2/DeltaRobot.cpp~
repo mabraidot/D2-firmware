@@ -187,7 +187,7 @@ void DeltaRobot::run()
 }
 
 /**
- * Calculates the number of steps it takes to get to an angle
+ * Function to calculate the number of steps it takes to get to an angle
  */
 long DeltaRobot::angle2steps(float angle)
 {

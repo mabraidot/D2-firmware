@@ -24,6 +24,7 @@
 #define DELTA_F             70.00  // base to shoulder radius
 #define DELTA_RE            331.30 // forearm length
 #define DELTA_RF            121.20  // arm length
+
 #define DELTA_GEAR_RATIO    150/22  // 150 theet big pulley / 22 theet small pulley
 
 
