@@ -74,7 +74,7 @@ void Planner::next(void)
   if(count > 0 && tail < head){
     bufferQueue[tail].busy = false;
     tail = modulo_inc(tail, RING_BUFFER_SIZE);
-    bufferQueue[tail].busy = true;
+    //bufferQueue[tail].busy = true;
     --count;
   }
 }
@@ -145,6 +145,7 @@ float Planner::getZPosition(void)
 float Planner::getXTheta(void)
 {
   if(count > 0 && tail < head){
+    bufferQueue[tail].busy = true;
     return bufferQueue[tail].XTheta;
   }else{
     return 0.00;
@@ -157,6 +158,7 @@ float Planner::getXTheta(void)
 float Planner::getYTheta(void)
 {
   if(count > 0 && tail < head){
+    bufferQueue[tail].busy = true;
     return bufferQueue[tail].YTheta;
   }else{
     return 0.00;
@@ -170,6 +172,7 @@ float Planner::getYTheta(void)
 float Planner::getZTheta(void)
 {
   if(count > 0 && tail < head){
+    bufferQueue[tail].busy = true;
     return bufferQueue[tail].ZTheta;
   }else{
     return 0.00;
@@ -187,6 +190,7 @@ void Planner::put(float XPosition, float YPosition, float ZPosition)
 
     kinematics.inverseKinematic(XPosition, YPosition, ZPosition);
     
+    /*debug.println("");
     debug.println("Positions ----------------------------> ");
     debug.println((String)XPosition);
     debug.println((String)YPosition);
@@ -195,14 +199,15 @@ void Planner::put(float XPosition, float YPosition, float ZPosition)
     debug.println((String)kinematics.theta1);
     debug.println((String)kinematics.theta2);
     debug.println((String)kinematics.theta3);
-    
+    */
     // If intended movement is possible
     if(kinematics.status == 0){
       
       bufferQueue[head].XPosition = XPosition;
       bufferQueue[head].YPosition = YPosition;
       bufferQueue[head].ZPosition = ZPosition;
-      bufferQueue[head].busy = (head == tail) ? true : false;
+      //bufferQueue[head].busy = (head == tail) ? true : false;
+      bufferQueue[head].busy = false;
     
       bufferQueue[head].XTheta = kinematics.theta1;
       bufferQueue[head].YTheta = kinematics.theta2;

@@ -4,6 +4,8 @@
 #include "DeltaRobot.h"
 #include "Planner.h"
 
+
+
 void setup() {
   Serial.begin(250000);
   delta.init();
@@ -12,8 +14,7 @@ void setup() {
 void loop() {
   if (Serial.available()) process_serial();
   delta.run();
-
-
+  
   /*
   static int serial_interval = 1000;
   static unsigned long serial_timeout = millis() + serial_interval;
