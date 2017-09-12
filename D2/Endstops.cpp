@@ -23,7 +23,6 @@ Endstops endstops;
  */
 void Endstops::init() {
 
-  _A_Hit, _B_Hit, _C_Hit = 0;
   Timer1.initialize(50);
   Timer1.attachInterrupt( endstops_interrupt );
   
@@ -38,32 +37,28 @@ void Endstops::init() {
   
 } // Endstops::init
 
+
 /**
  * Update the endstops bits from the pins.
  * This function is called from the timer interrupt.
  */
 void Endstops::update(void) {
 
-  _A_Hit = _B_Hit = _C_Hit = 1;
-  
   static uint16_t stateA = 0; // current debounce status
   stateA = (stateA << 1) | !digitalRead(X_MIN_PIN) | 0xe000;
   if(stateA == 0xf000){
-    _A_Hit = 1;   // endstop has hit
     debug.print("Endstop A has hit.", 1);
   }
 
   static uint16_t stateB = 0; // current debounce status
   stateB = (stateB << 1) | !digitalRead(Y_MIN_PIN) | 0xe000;
   if(stateB == 0xf000){
-    _B_Hit = 1;   // endstop has hit
     debug.print("Endstop B has hit.", 1);
   }
 
   static uint16_t stateC = 0; // current debounce status
   stateC = (stateC << 1) | !digitalRead(Z_MIN_PIN) | 0xe000;
   if(stateC == 0xf000){
-    _C_Hit = 1;   // endstop has hit
     debug.print("Endstop C has hit.", 1);
   }
 }
