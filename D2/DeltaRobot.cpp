@@ -88,20 +88,17 @@ void DeltaRobot::init()
   /**
    * CAMBIAR POR NUEVA LIBRERIA STEPPER
    */
-  //stepperA.setEnablePin(X_ENABLE_PIN);
   stepperA.setMaxSpeed(5000.0);
-  stepperA.setAcceleration(1000);
-  stepperA.setSpeed(2500.0);
+  stepperA.setAcceleration(2000);
+  stepperA.setSpeed(3000.0);
 
-  //stepperB.setEnablePin(Y_ENABLE_PIN);
   stepperB.setMaxSpeed(5000.0);
-  stepperB.setAcceleration(1000);
-  stepperB.setSpeed(2500.0);
+  stepperB.setAcceleration(2000);
+  stepperB.setSpeed(3000.0);
 
-  //stepperC.setEnablePin(Z_ENABLE_PIN);
   stepperC.setMaxSpeed(5000.0);
-  stepperC.setAcceleration(1000);
-  stepperC.setSpeed(2500.0);
+  stepperC.setAcceleration(2000);
+  stepperC.setSpeed(3000.0);
   /*
   char rpm = 1400;
   stepperA.begin(rpm,2);
@@ -178,7 +175,7 @@ void DeltaRobot::run()
   stepperA.run();
   stepperB.run();
   stepperC.run();
-
+  
 
   // Si los motores terminaron el comando, liberar el planner 
   // para poder tomar otro comando
