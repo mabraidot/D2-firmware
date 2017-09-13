@@ -1,6 +1,6 @@
-#include "Debug.h";
-#include "Planner.h";
-#include "Kinematics.h";
+#include "Debug.h"
+#include "Planner.h"
+#include "Kinematics.h"
 
 Planner plan;
 Kinematics kinematics = Kinematics();

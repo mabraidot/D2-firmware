@@ -15,13 +15,6 @@ class Endstops {
     void init();
     static void update();
 
-
-  private:
-
-    static byte _A_Hit, 
-                _B_Hit, 
-                _C_Hit;
-
 };
 
 extern Endstops endstops;

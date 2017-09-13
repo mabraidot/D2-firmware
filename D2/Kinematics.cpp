@@ -1,4 +1,4 @@
-#include "Kinematics.h";
+#include "Kinematics.h"
 #include "Debug.h"
 
 Kinematics::Kinematics(void)
