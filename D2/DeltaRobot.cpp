@@ -22,26 +22,26 @@ long xsteps,  ysteps,  zsteps = 0;
 
 // @TODO: remove this!, it is only for demonstration purpose
 void DeltaRobot::stepper_choreography(int mode = 0){
+  plan.put(0, 0, -300);
   if(mode == 0){
-    static int i = 0;
+    int i = 0;
     while(i<360){
       plan.put(80*cos(i), 80*sin(i), -300);
       i += 6;
     }
-    plan.put(0, 0, -300);
   }
   
   if(mode == 1){
-    static int j = 0;
+    int j = 0;
     while(j<4){
-      plan.put(0, 0, -250);
-      plan.put(80, 80, -330);
-      plan.put(0, 0, -250);
-      plan.put(-80, -80, -330);
+      plan.put(0, 0, -280);
+      plan.put(80, 80, -310);
+      plan.put(0, 0, -280);
+      plan.put(-80, -80, -310);
       j++;
     }
-    plan.put(0, 0, -300);
   }
+  plan.put(0, 0, -300);
 }
 
 
@@ -73,18 +73,17 @@ void DeltaRobot::init()
   pinMode(Z_ENABLE_PIN, OUTPUT);
   
 
-  //stepperA.setEnablePin(X_ENABLE_PIN);
-  stepperA.setMaxSpeed(5000.0);
-  stepperA.setAcceleration(2000);
-  stepperA.setSpeed(3000.0);
+  stepperA.setMaxSpeed(50000.0);
+  stepperA.setAcceleration(50000);
+  stepperA.setSpeed(20000.0);
 
-  stepperB.setMaxSpeed(5000.0);
-  stepperB.setAcceleration(2000);
-  stepperB.setSpeed(3000.0);
+  stepperB.setMaxSpeed(50000.0);
+  stepperB.setAcceleration(50000);
+  stepperB.setSpeed(20000.0);
 
-  stepperC.setMaxSpeed(5000.0);
-  stepperC.setAcceleration(1000);
-  stepperC.setSpeed(2500.0);
+  stepperC.setMaxSpeed(50000.0);
+  stepperC.setAcceleration(50000);
+  stepperC.setSpeed(20000.0);
   
 
 }
@@ -111,7 +110,7 @@ void DeltaRobot::run()
       ysteps = angle2steps(plan.getYTheta());
       zsteps = angle2steps(plan.getZTheta());
  
-      debug.println("Prev Position ----------------------------> ");
+      /*debug.println("Prev Position ----------------------------> ");
       debug.println((String)arms[0].position);
       debug.println((String)arms[1].position);
       debug.println((String)arms[2].position);
@@ -123,7 +122,7 @@ void DeltaRobot::run()
       debug.println((String)xsteps);
       debug.println((String)ysteps);
       debug.println((String)zsteps);
-      
+      */
       
       stepperA.moveTo(xsteps);
       stepperB.moveTo(ysteps);
@@ -154,6 +153,6 @@ void DeltaRobot::run()
  */
 long DeltaRobot::angle2steps(float angle)
 {
-	return (long) round((angle / 0.9) * _microsteps * _gearRatio);
+  return (long) round((angle / 360) * _stepsPerTurn * _gearRatio);
 }
 

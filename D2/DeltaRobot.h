@@ -24,7 +24,7 @@ class DeltaRobot {
   private:
     arm arms[3];
 		float _gearRatio = DELTA_GEAR_RATIO;
-		float _microsteps = 400 * MICROSTEPS; //(360/0.9)*microstepping
+		float _stepsPerTurn = 400 * MICROSTEPS; //(360/0.9)*microstepping
     
 };
 
