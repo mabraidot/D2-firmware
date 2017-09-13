@@ -13,12 +13,15 @@ DeltaRobot delta;
 
 
 #include <AccelStepper.h>
+#include <MultiStepper.h>
 AccelStepper stepperA(AccelStepper::DRIVER, X_STEP_PIN, X_DIR_PIN);
 AccelStepper stepperB(AccelStepper::DRIVER, Y_STEP_PIN, Y_DIR_PIN);
 AccelStepper stepperC(AccelStepper::DRIVER, Z_STEP_PIN, Z_DIR_PIN);
+MultiStepper steppers;
 
 long xsteps,  ysteps,  zsteps = 0;
-
+long positions[3]; // Array of desired stepper positions
+boolean running = false;
 
 // @TODO: remove this!, it is only for demonstration purpose
 void DeltaRobot::stepper_choreography(int mode = 0){
@@ -73,7 +76,7 @@ void DeltaRobot::init()
   pinMode(Z_ENABLE_PIN, OUTPUT);
   
 
-  stepperA.setMaxSpeed(50000.0);
+  /*stepperA.setMaxSpeed(50000.0);
   stepperA.setAcceleration(50000);
   stepperA.setSpeed(20000.0);
 
@@ -83,25 +86,22 @@ void DeltaRobot::init()
 
   stepperC.setMaxSpeed(50000.0);
   stepperC.setAcceleration(50000);
-  stepperC.setSpeed(20000.0);
-  
+  stepperC.setSpeed(20000.0);*/
+  float speed = 800.0;
+  stepperA.setMaxSpeed(speed*2);
+  stepperB.setMaxSpeed(speed*2);
+  stepperC.setMaxSpeed(speed*2);
+  stepperA.setSpeed(speed);
+  stepperB.setSpeed(speed);
+  stepperC.setSpeed(speed);
 
+  steppers.addStepper(stepperA);
+  steppers.addStepper(stepperB);
+  steppers.addStepper(stepperC);
 }
 
 void DeltaRobot::run()
 {
-  /** 
-   * si hay comandos en la queue (plan.count > 0) 
-   * leer el comando de la tail
-   * si no esta ocupado (plan.busy = true)
-   * setear el movimiento del motor
-   * fin si
-   * resto del bloque de control del motor stop/run
-   * si el motor termino
-   * mover la tail del buffer al siguiente comando
-   * fin si
-   * fin si hay comandos en la queue
-   */
   if(!plan.isEmpty()){
     
     if(!plan.isBusy()){
@@ -109,7 +109,11 @@ void DeltaRobot::run()
       xsteps = angle2steps(plan.getXTheta());
       ysteps = angle2steps(plan.getYTheta());
       zsteps = angle2steps(plan.getZTheta());
- 
+      
+      positions[0] = xsteps;
+      positions[1] = ysteps;
+      positions[2] = zsteps;
+
       /*debug.println("Prev Position ----------------------------> ");
       debug.println((String)arms[0].position);
       debug.println((String)arms[1].position);
@@ -124,9 +128,10 @@ void DeltaRobot::run()
       debug.println((String)zsteps);
       */
       
-      stepperA.moveTo(xsteps);
-      stepperB.moveTo(ysteps);
-      stepperC.moveTo(zsteps);
+      //stepperA.moveTo(xsteps);
+      //stepperB.moveTo(ysteps);
+      //stepperC.moveTo(zsteps);
+      steppers.moveTo(positions);
       
 
     }else{
@@ -138,12 +143,14 @@ void DeltaRobot::run()
     
   }
   // Start motors
-  stepperA.run();
-  stepperB.run();
-  stepperC.run();
+  //stepperA.run();
+  //stepperB.run();
+  //stepperC.run();
+  running = steppers.run();
 
   // Free up the planner if motors have finished, in order to take another command
-  if (!stepperA.isRunning() && !stepperB.isRunning() && !stepperC.isRunning()) {
+  //if (!stepperA.isRunning() && !stepperB.isRunning() && !stepperC.isRunning()) {
+  if(!running){
     plan.next();
   }
 }
