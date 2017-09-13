@@ -59,11 +59,8 @@ void DeltaRobot::homing(){
   }*/
   boolean homed = false;
   float speed = 20.0;
-	/* 
-  @TODO:	apparently setspeed is not taken in account, set maxspeed instead
-	@TODO:	see post at https://groups.google.com/forum/#!searchin/accelstepper/stopping$20multistepper%7Csort:relevance/accelstepper/UMec3UXJQ44/t2aalIlUBQAJ
-					and https://groups.google.com/forum/#!searchin/accelstepper/home$20multistepper%7Csort:relevance/accelstepper/IT5XPk5dcrI/WF5LUt_PAwAJ
-	*/
+	// @TODO: apparently setspeed is not taken in account, set maxspeed instead
+	// @TODO: see post at https://groups.google.com/forum/#!searchin/accelstepper/stopping$20multistepper%7Csort:relevance/accelstepper/UMec3UXJQ44/t2aalIlUBQAJ
   stepperA.setSpeed(speed);
   stepperB.setSpeed(speed);
   stepperC.setSpeed(speed);
