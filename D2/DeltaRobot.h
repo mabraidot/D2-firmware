@@ -13,6 +13,7 @@ class DeltaRobot {
       byte homed;
     } arm;
     
+    void homing(void);
     void init(void);
     void run(void);
 		long angle2steps(float angle);

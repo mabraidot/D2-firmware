@@ -8,7 +8,7 @@ class Endstops {
   public:
     
     Endstops() {};
-
+    boolean hit_A, hit_B, hit_C;
     /**
      * Initialize the endstop pins
      */

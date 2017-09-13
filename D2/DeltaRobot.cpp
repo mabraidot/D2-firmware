@@ -52,7 +52,36 @@ void DeltaRobot::stepper_choreography(int mode = 0){
 
 
 
+void DeltaRobot::homing(){
+  /*for(int i = 0; i < 3; i++){
+    arms[i].position = 0;
+    arms[i].homed = 0;
+  }*/
+  boolean homed = false;
+  float speed = 20.0;
+  stepperA.setSpeed(speed);
+  stepperB.setSpeed(speed);
+  stepperC.setSpeed(speed);
+  positions[0] = positions[1] = positions[2] = angle2steps(-180.0);
+  steppers.moveTo(positions);
+  
+  while(!homed){
+    homed = steppers.run();
+    if(endstops.hit_A){
+      stepperA.stop();
+      stepperA.setCurrentPosition(0);
+    }
+    if(endstops.hit_B){
+      stepperB.stop();
+      stepperB.setCurrentPosition(0);
+    }
+    if(endstops.hit_C){
+      stepperC.stop();
+      stepperC.setCurrentPosition(0);
+    }
 
+  }
+}
 
     
 void DeltaRobot::init()
@@ -87,7 +116,7 @@ void DeltaRobot::init()
   stepperC.setMaxSpeed(50000.0);
   stepperC.setAcceleration(50000);
   stepperC.setSpeed(20000.0);*/
-  float speed = 800.0;
+  float speed = 10.0;//800.0;
   stepperA.setMaxSpeed(speed*2);
   stepperB.setMaxSpeed(speed*2);
   stepperC.setMaxSpeed(speed*2);
@@ -98,6 +127,8 @@ void DeltaRobot::init()
   steppers.addStepper(stepperA);
   steppers.addStepper(stepperB);
   steppers.addStepper(stepperC);
+
+  //homing();
 }
 
 void DeltaRobot::run()
