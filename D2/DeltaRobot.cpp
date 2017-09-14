@@ -107,6 +107,11 @@ void DeltaRobot::homing(){
     }
 
   }
+
+  arms[0].position = angle2steps(-75.0);
+  arms[1].position = angle2steps(-75.0);
+  arms[2].position = angle2steps(-75.0);
+
 }
 
     
