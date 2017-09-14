@@ -19,7 +19,6 @@ AccelStepper stepperB(AccelStepper::DRIVER, Y_STEP_PIN, Y_DIR_PIN);
 AccelStepper stepperC(AccelStepper::DRIVER, Z_STEP_PIN, Z_DIR_PIN);
 MultiStepper steppers;
 
-//long xsteps,  ysteps,  zsteps = 0;
 long positions[3]; // Array of desired stepper positions
 boolean running = false;
 
@@ -109,9 +108,9 @@ void DeltaRobot::homing(){
 
   // We set the new initial position. Horizontal arm is considered the zero angle.
   angle = -75.0;
-  arms[0].position = angle2steps(angle);
-  arms[1].position = angle2steps(angle);
-  arms[2].position = angle2steps(angle);
+  arms[0].position = angle2steps(angle - DELTA_X_OFFSET);
+  arms[1].position = angle2steps(angle - DELTA_Y_OFFSET);
+  arms[2].position = angle2steps(angle - DELTA_Z_OFFSET);
   stepperA.setCurrentPosition(arms[0].position);
   stepperB.setCurrentPosition(arms[1].position);
   stepperC.setCurrentPosition(arms[2].position);
