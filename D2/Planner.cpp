@@ -180,9 +180,19 @@ float Planner::getZTheta(void)
 }
 
 
+/**
+ * Stores a new movement into the buffer. Uses forward kinematics to calculate XYZ positions
+ */
+void Planner::putAngle(float XTheta, float YTheta, float ZTheta)
+{
+  kinematics.forwardKinematic(XTheta, YTheta, ZTheta);
+  if(kinematics.status == 0){
+    put(kinematics.x, kinematics.y, kinematics.z);
+  }
+}
 
 /**
- * Stores a new movement into the buffer.
+ * Stores a new movement into the buffer. Uses inverse kinematics to calculate angles
  */
 void Planner::put(float XPosition, float YPosition, float ZPosition)
 {

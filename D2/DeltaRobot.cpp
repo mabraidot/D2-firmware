@@ -7,9 +7,8 @@
 #include "DeltaRobot.h"
 #include "Planner.h"
 
+
 DeltaRobot delta;
-
-
 
 
 #include <AccelStepper.h>
@@ -20,7 +19,7 @@ AccelStepper stepperC(AccelStepper::DRIVER, Z_STEP_PIN, Z_DIR_PIN);
 MultiStepper steppers;
 
 long positions[3]; // Array of desired stepper positions
-boolean running = false;
+//boolean running = false;
 
 // @TODO: remove this!, it is only for demonstration purpose
 void DeltaRobot::stepper_choreography(int mode = 0){
@@ -114,7 +113,8 @@ void DeltaRobot::homing(){
   stepperA.setCurrentPosition(arms[0].position);
   stepperB.setCurrentPosition(arms[1].position);
   stepperC.setCurrentPosition(arms[2].position);
-
+  // After homing, go to angle zero
+  plan.putAngle(0.0, 0.0, 0.0);
 }
 
     
@@ -142,11 +142,7 @@ void DeltaRobot::init()
   stepperA.setAcceleration(speed);
   stepperB.setAcceleration(speed);
   stepperC.setAcceleration(speed);
-  /*stepperA.setSpeed(speed);
-  stepperB.setSpeed(speed);
-  stepperC.setSpeed(speed);
-  */
-
+  
   steppers.addStepper(stepperA);
   steppers.addStepper(stepperB);
   steppers.addStepper(stepperC);
@@ -188,11 +184,9 @@ void DeltaRobot::run()
 		}
     
   }
-  // Start motors
-  running = steppers.run();
-
-  // Free up the planner if motors have finished, in order to take another command
-  if(!running){
+  
+  // Run motors. Free up the planner if motors have finished, in order to take another command
+  if(!steppers.run()){
     plan.next();
   }
 }
