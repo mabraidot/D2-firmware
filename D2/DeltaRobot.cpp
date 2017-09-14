@@ -53,36 +53,57 @@ void DeltaRobot::stepper_choreography(int mode = 0){
 
 
 void DeltaRobot::homing(){
-  /*for(int i = 0; i < 3; i++){
+  
+  for(int i = 0; i < 3; i++){
     arms[i].position = 0;
     arms[i].homed = 0;
-  }*/
-  boolean homed = false;
-  float speed = 20.0;
-	/* 
-  @TODO:	apparently setspeed is not taken in account, set maxspeed instead
-	@TODO:	see post at https://groups.google.com/forum/#!searchin/accelstepper/stopping$20multistepper%7Csort:relevance/accelstepper/UMec3UXJQ44/t2aalIlUBQAJ
-					and https://groups.google.com/forum/#!searchin/accelstepper/home$20multistepper%7Csort:relevance/accelstepper/IT5XPk5dcrI/WF5LUt_PAwAJ
-	*/
-  stepperA.setSpeed(speed);
-  stepperB.setSpeed(speed);
-  stepperC.setSpeed(speed);
-  positions[0] = positions[1] = positions[2] = angle2steps(-180.0);
-  steppers.moveTo(positions);
+  }
   
-  while(!homed){
-    homed = steppers.run();
-    if(endstops.hit_A){
-      stepperA.stop();
-      stepperA.setCurrentPosition(0);
+  boolean homed = false;
+  float speed = 1000.0;
+	stepperA.setMaxSpeed(speed*2);
+  stepperB.setMaxSpeed(speed*2);
+  stepperC.setMaxSpeed(speed*2);
+  stepperA.setAcceleration(speed);
+  stepperB.setAcceleration(speed);
+  stepperC.setAcceleration(speed);
+  /*stepperA.setSpeed(speed);
+  stepperB.setSpeed(speed);
+  stepperC.setSpeed(speed);*/
+  
+  positions[0] = positions[1] = positions[2] = angle2steps(-180.0);
+  stepperA.moveTo(positions[0]);
+  stepperB.moveTo(positions[1]);
+  stepperC.moveTo(positions[2]);
+  
+  while(!arms[0].homed || !arms[1].homed || !arms[2].homed){
+  
+    if(!arms[0].homed){
+      if(endstops.a_hitten()){
+        stepperA.setSpeed(0);
+        stepperA.moveTo(stepperA.currentPosition());
+        arms[0].homed = 1;
+      }else{
+        stepperA.run();
+      }
     }
-    if(endstops.hit_B){
-      stepperB.stop();
-      stepperB.setCurrentPosition(0);
+    if(!arms[1].homed){
+      if(endstops.b_hitten()){
+        stepperB.setSpeed(0);
+        stepperB.moveTo(stepperB.currentPosition());
+        arms[1].homed = 1;
+      }else{
+        stepperB.run();
+      }
     }
-    if(endstops.hit_C){
-      stepperC.stop();
-      stepperC.setCurrentPosition(0);
+    if(!arms[2].homed){
+      if(endstops.c_hitten()){
+        stepperC.setSpeed(0);
+        stepperC.moveTo(stepperC.currentPosition());
+        arms[2].homed = 1;
+      }else{
+        stepperC.run();
+      }
     }
 
   }
@@ -91,13 +112,8 @@ void DeltaRobot::homing(){
     
 void DeltaRobot::init()
 {
-  // @TODO: make a homing routine
   endstops.init();
   plan.init(true);
-  for(int i = 0; i < 3; i++){
-    arms[i].position = 0;
-    arms[i].homed = 1;
-  }
   
   pinMode(X_STEP_PIN, OUTPUT);
   pinMode(X_DIR_PIN, OUTPUT);
@@ -109,31 +125,20 @@ void DeltaRobot::init()
   pinMode(Z_DIR_PIN, OUTPUT); 
   pinMode(Z_ENABLE_PIN, OUTPUT);
   
-
-  /*stepperA.setMaxSpeed(50000.0);
-  stepperA.setAcceleration(50000);
-  stepperA.setSpeed(20000.0);
-
-  stepperB.setMaxSpeed(50000.0);
-  stepperB.setAcceleration(50000);
-  stepperB.setSpeed(20000.0);
-
-  stepperC.setMaxSpeed(50000.0);
-  stepperC.setAcceleration(50000);
-  stepperC.setSpeed(20000.0);*/
-  float speed = 10.0;//800.0;
+  float speed = 800.0;
   stepperA.setMaxSpeed(speed*2);
   stepperB.setMaxSpeed(speed*2);
   stepperC.setMaxSpeed(speed*2);
   stepperA.setSpeed(speed);
   stepperB.setSpeed(speed);
   stepperC.setSpeed(speed);
+  
+  homing();
 
   steppers.addStepper(stepperA);
   steppers.addStepper(stepperB);
   steppers.addStepper(stepperC);
 
-  //homing();
 }
 
 void DeltaRobot::run()

@@ -7,6 +7,8 @@
 #include "Endstops.h"
 #include <TimerOne.h>
 
+Endstops endstops;
+
 // Timer1 interrupt
 void endstops_interrupt(void){
   endstops.update();
@@ -14,7 +16,6 @@ void endstops_interrupt(void){
 
 
 
-Endstops endstops;
 
 // public:
 /**
@@ -36,6 +37,21 @@ void Endstops::init() {
   
 } // Endstops::init
 
+boolean Endstops::a_hitten(void){
+  boolean temp = hit_A;
+  hit_A = false;
+  return temp;
+}
+boolean Endstops::b_hitten(void){
+  boolean temp = hit_B;
+  hit_B = false;
+  return temp;
+}
+boolean Endstops::c_hitten(void){
+  boolean temp = hit_C;
+  hit_C = false;
+  return temp;
+}
 
 /**
  * Update the endstops bits from the pins.
@@ -43,26 +59,24 @@ void Endstops::init() {
  */
 void Endstops::update(void) {
 
-  endstops.hit_A, endstops.hit_B, endstops.hit_C = 0;
-  
   static uint16_t stateA = 0; // current debounce status
   stateA = (stateA << 1) | !digitalRead(X_MIN_PIN) | 0xe000;
   if(stateA == 0xf000){
-    debug.print("Endstop A has hit.", 1);
-    endstops.hit_A = 1;
+    hit_A = true;
+    debug.println("Endstop A has hit.");
   }
 
   static uint16_t stateB = 0; // current debounce status
   stateB = (stateB << 1) | !digitalRead(Y_MIN_PIN) | 0xe000;
   if(stateB == 0xf000){
-    debug.print("Endstop B has hit.", 1);
-    endstops.hit_B = 1;
+    hit_B = true;
+    debug.println("Endstop B has hit.");
   }
 
   static uint16_t stateC = 0; // current debounce status
   stateC = (stateC << 1) | !digitalRead(Z_MIN_PIN) | 0xe000;
   if(stateC == 0xf000){
-    debug.print("Endstop C has hit.", 1);
-    endstops.hit_C = 1;
+    hit_C = true;
+    debug.println("Endstop C has hit.");
   }
 }
