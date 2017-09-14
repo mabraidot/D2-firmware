@@ -8,16 +8,16 @@ class Endstops {
   public:
     
     Endstops() {};
-    boolean a_hitten(void);
-    boolean b_hitten(void);
-    boolean c_hitten(void);
+    boolean is_A_hit(void);
+    boolean is_B_hit(void);
+    boolean is_C_hit(void);
     /**
      * Initialize the endstop pins
      */
     void init();
     void update();
   private:
-    boolean hit_A, hit_B, hit_C;
+    boolean _hit_A, _hit_B, _hit_C;
     
 };
 

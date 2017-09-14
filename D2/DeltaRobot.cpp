@@ -61,17 +61,16 @@ void DeltaRobot::homing(){
   
   boolean homed = false;
   float speed = 1000.0;
+  float angle = -180.0;
+
 	stepperA.setMaxSpeed(speed*2);
   stepperB.setMaxSpeed(speed*2);
   stepperC.setMaxSpeed(speed*2);
   stepperA.setAcceleration(speed);
   stepperB.setAcceleration(speed);
   stepperC.setAcceleration(speed);
-  /*stepperA.setSpeed(speed);
-  stepperB.setSpeed(speed);
-  stepperC.setSpeed(speed);*/
   
-  positions[0] = positions[1] = positions[2] = angle2steps(-180.0);
+  positions[0] = positions[1] = positions[2] = angle2steps(angle);
   stepperA.moveTo(positions[0]);
   stepperB.moveTo(positions[1]);
   stepperC.moveTo(positions[2]);
@@ -79,7 +78,7 @@ void DeltaRobot::homing(){
   while(!arms[0].homed || !arms[1].homed || !arms[2].homed){
   
     if(!arms[0].homed){
-      if(endstops.a_hitten()){
+      if(endstops.is_A_hit()){
         stepperA.setSpeed(0);
         stepperA.moveTo(stepperA.currentPosition());
         arms[0].homed = 1;
@@ -88,7 +87,7 @@ void DeltaRobot::homing(){
       }
     }
     if(!arms[1].homed){
-      if(endstops.b_hitten()){
+      if(endstops.is_B_hit()){
         stepperB.setSpeed(0);
         stepperB.moveTo(stepperB.currentPosition());
         arms[1].homed = 1;
@@ -97,7 +96,7 @@ void DeltaRobot::homing(){
       }
     }
     if(!arms[2].homed){
-      if(endstops.c_hitten()){
+      if(endstops.is_C_hit()){
         stepperC.setSpeed(0);
         stepperC.moveTo(stepperC.currentPosition());
         arms[2].homed = 1;
@@ -108,17 +107,20 @@ void DeltaRobot::homing(){
 
   }
 
-  arms[0].position = angle2steps(-75.0);
-  arms[1].position = angle2steps(-75.0);
-  arms[2].position = angle2steps(-75.0);
+  // We set the new initial position. Horizontal arm is considered the zero angle.
+  angle = -75.0;
+  arms[0].position = angle2steps(angle);
+  arms[1].position = angle2steps(angle);
+  arms[2].position = angle2steps(angle);
+  stepperA.setCurrentPosition(arms[0].position);
+  stepperB.setCurrentPosition(arms[1].position);
+  stepperC.setCurrentPosition(arms[2].position);
 
 }
 
     
 void DeltaRobot::init()
 {
-  endstops.init();
-  plan.init(true);
   
   pinMode(X_STEP_PIN, OUTPUT);
   pinMode(X_DIR_PIN, OUTPUT);
@@ -130,15 +132,21 @@ void DeltaRobot::init()
   pinMode(Z_DIR_PIN, OUTPUT); 
   pinMode(Z_ENABLE_PIN, OUTPUT);
   
+  endstops.init();
+  plan.init(true);
+  homing();
+
   float speed = 800.0;
   stepperA.setMaxSpeed(speed*2);
   stepperB.setMaxSpeed(speed*2);
   stepperC.setMaxSpeed(speed*2);
-  stepperA.setSpeed(speed);
+  stepperA.setAcceleration(speed);
+  stepperB.setAcceleration(speed);
+  stepperC.setAcceleration(speed);
+  /*stepperA.setSpeed(speed);
   stepperB.setSpeed(speed);
   stepperC.setSpeed(speed);
-  
-  homing();
+  */
 
   steppers.addStepper(stepperA);
   steppers.addStepper(stepperB);

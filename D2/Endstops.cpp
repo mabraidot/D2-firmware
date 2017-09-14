@@ -37,19 +37,19 @@ void Endstops::init() {
   
 } // Endstops::init
 
-boolean Endstops::a_hitten(void){
-  boolean temp = hit_A;
-  hit_A = false;
+boolean Endstops::is_A_hit(void){
+  boolean temp = _hit_A;
+  _hit_A = false;
   return temp;
 }
-boolean Endstops::b_hitten(void){
-  boolean temp = hit_B;
-  hit_B = false;
+boolean Endstops::is_B_hit(void){
+  boolean temp = _hit_B;
+  _hit_B = false;
   return temp;
 }
-boolean Endstops::c_hitten(void){
-  boolean temp = hit_C;
-  hit_C = false;
+boolean Endstops::is_C_hit(void){
+  boolean temp = _hit_C;
+  _hit_C = false;
   return temp;
 }
 
@@ -62,21 +62,21 @@ void Endstops::update(void) {
   static uint16_t stateA = 0; // current debounce status
   stateA = (stateA << 1) | !digitalRead(X_MIN_PIN) | 0xe000;
   if(stateA == 0xf000){
-    hit_A = true;
+    _hit_A = true;
     debug.println("Endstop A has hit.");
   }
 
   static uint16_t stateB = 0; // current debounce status
   stateB = (stateB << 1) | !digitalRead(Y_MIN_PIN) | 0xe000;
   if(stateB == 0xf000){
-    hit_B = true;
+    _hit_B = true;
     debug.println("Endstop B has hit.");
   }
 
   static uint16_t stateC = 0; // current debounce status
   stateC = (stateC << 1) | !digitalRead(Z_MIN_PIN) | 0xe000;
   if(stateC == 0xf000){
-    hit_C = true;
+    _hit_C = true;
     debug.println("Endstop C has hit.");
   }
 }
