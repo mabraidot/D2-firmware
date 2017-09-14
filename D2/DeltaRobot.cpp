@@ -19,7 +19,7 @@ AccelStepper stepperB(AccelStepper::DRIVER, Y_STEP_PIN, Y_DIR_PIN);
 AccelStepper stepperC(AccelStepper::DRIVER, Z_STEP_PIN, Z_DIR_PIN);
 MultiStepper steppers;
 
-long xsteps,  ysteps,  zsteps = 0;
+//long xsteps,  ysteps,  zsteps = 0;
 long positions[3]; // Array of desired stepper positions
 boolean running = false;
 
@@ -160,14 +160,10 @@ void DeltaRobot::run()
     
     if(!plan.isBusy()){
 
-      xsteps = angle2steps(plan.getXTheta());
-      ysteps = angle2steps(plan.getYTheta());
-      zsteps = angle2steps(plan.getZTheta());
+      positions[0] = angle2steps(plan.getXTheta());
+      positions[1] = angle2steps(plan.getYTheta());
+      positions[2] = angle2steps(plan.getZTheta());
       
-      positions[0] = xsteps;
-      positions[1] = ysteps;
-      positions[2] = zsteps;
-
       /*debug.println("Prev Position ----------------------------> ");
       debug.println((String)arms[0].position);
       debug.println((String)arms[1].position);
@@ -177,14 +173,11 @@ void DeltaRobot::run()
       debug.println((String)plan.getYTheta());
       debug.println((String)plan.getZTheta());
       debug.println("Steps to move ----------------------------> ");
-      debug.println((String)xsteps);
-      debug.println((String)ysteps);
-      debug.println((String)zsteps);
+      debug.println((String)positions[0]);
+      debug.println((String)positions[1]);
+      debug.println((String)positions[2]);
       */
       
-      //stepperA.moveTo(xsteps);
-      //stepperB.moveTo(ysteps);
-      //stepperC.moveTo(zsteps);
       steppers.moveTo(positions);
       
 
@@ -197,13 +190,9 @@ void DeltaRobot::run()
     
   }
   // Start motors
-  //stepperA.run();
-  //stepperB.run();
-  //stepperC.run();
   running = steppers.run();
 
   // Free up the planner if motors have finished, in order to take another command
-  //if (!stepperA.isRunning() && !stepperB.isRunning() && !stepperC.isRunning()) {
   if(!running){
     plan.next();
   }
