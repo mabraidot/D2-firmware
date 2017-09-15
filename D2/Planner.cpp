@@ -71,10 +71,9 @@ int Planner::isBusy()
  */
 void Planner::next(void)
 {
-  if(count > 0 && tail < head){
+  if(count > 0){
     bufferQueue[tail].busy = false;
     tail = modulo_inc(tail, RING_BUFFER_SIZE);
-    //bufferQueue[tail].busy = true;
     --count;
   }
 }
@@ -86,7 +85,7 @@ Planner::ringBuffer Planner::get()
 {
   ringBuffer c;
   //if(count > 0 && tail < head && !bufferQueue[tail].busy){
-  if(count > 0 && tail < head){
+  if(count > 0){
 
     //bufferQueue[tail].busy = true;
     c = bufferQueue[tail];
@@ -108,7 +107,7 @@ Planner::ringBuffer Planner::get()
  */
 float Planner::getXPosition(void)
 {
-	if(count > 0 && tail < head){
+	if(count > 0){
 		return bufferQueue[tail].XPosition;
 	}else{
 		return 0.00;
@@ -120,7 +119,7 @@ float Planner::getXPosition(void)
  */
 float Planner::getYPosition(void)
 {
-	if(count > 0 && tail < head){
+	if(count > 0){
 		return bufferQueue[tail].YPosition;
 	}else{
 		return 0.00;
@@ -132,7 +131,7 @@ float Planner::getYPosition(void)
  */
 float Planner::getZPosition(void)
 {
-	if(count > 0 && tail < head){
+	if(count > 0){
 		return bufferQueue[tail].ZPosition;
 	}else{
 		return 0.00;
@@ -144,7 +143,7 @@ float Planner::getZPosition(void)
  */
 float Planner::getXTheta(void)
 {
-  if(count > 0 && tail < head){
+  if(count > 0){
     bufferQueue[tail].busy = true;
     return bufferQueue[tail].XTheta;
   }else{
@@ -157,7 +156,7 @@ float Planner::getXTheta(void)
  */
 float Planner::getYTheta(void)
 {
-  if(count > 0 && tail < head){
+  if(count > 0){
     bufferQueue[tail].busy = true;
     return bufferQueue[tail].YTheta;
   }else{
@@ -171,7 +170,7 @@ float Planner::getYTheta(void)
  */
 float Planner::getZTheta(void)
 {
-  if(count > 0 && tail < head){
+  if(count > 0){
     bufferQueue[tail].busy = true;
     return bufferQueue[tail].ZTheta;
   }else{

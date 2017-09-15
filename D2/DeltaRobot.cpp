@@ -19,28 +19,40 @@ AccelStepper stepperC(AccelStepper::DRIVER, Z_STEP_PIN, Z_DIR_PIN);
 MultiStepper steppers;
 
 long positions[3]; // Array of desired stepper positions
-//boolean running = false;
+boolean running = false;
 
 // @TODO: remove this!, it is only for demonstration purpose
 void DeltaRobot::stepper_choreography(int mode = 0){
+
   plan.put(0, 0, -300);
+  // circle
   if(mode == 0){
     int i = 0;
-    while(i<360){
+    while(i<120){
       plan.put(80*cos(i), 80*sin(i), -300);
       i += 6;
     }
   }
   
   if(mode == 1){
-    int j = 0;
+    /*int j = 0;
     while(j<4){
       plan.put(0, 0, -280);
       plan.put(80, 80, -310);
       plan.put(0, 0, -280);
       plan.put(-80, -80, -310);
       j++;
+    }*/
+
+    // sigmoid
+    for(float j=-80.0; j<80.0; j++){
+      float sigmoid = 80.0 / (1.0 + exp(-0.05 * j));
+      //debug.print((String)j);
+      //debug.print(" - ");
+      //debug.println((String)sigmoid);
+      plan.put(j, sigmoid, -300);
     }
+
   }
   plan.put(0, 0, -300);
 }
@@ -135,13 +147,13 @@ void DeltaRobot::init()
   plan.init(true);
   homing();
 
-  float speed = 800.0;
-  stepperA.setMaxSpeed(speed*2);
-  stepperB.setMaxSpeed(speed*2);
-  stepperC.setMaxSpeed(speed*2);
-  stepperA.setAcceleration(speed);
-  stepperB.setAcceleration(speed);
-  stepperC.setAcceleration(speed);
+  float speed = 10000.0;
+  stepperA.setMaxSpeed(speed);
+  stepperB.setMaxSpeed(speed);
+  stepperC.setMaxSpeed(speed);
+  stepperA.setAcceleration(speed*2);
+  stepperB.setAcceleration(speed*2);
+  stepperC.setAcceleration(speed*2);
   
   steppers.addStepper(stepperA);
   steppers.addStepper(stepperB);
@@ -173,7 +185,10 @@ void DeltaRobot::run()
       debug.println((String)positions[2]);
       */
       
-      steppers.moveTo(positions);
+      //steppers.moveTo(positions);
+      stepperA.moveTo(positions[0]);
+      stepperB.moveTo(positions[1]);
+      stepperC.moveTo(positions[2]);
       
 
     }else{
@@ -185,8 +200,12 @@ void DeltaRobot::run()
     
   }
   
+  stepperA.run();
+  stepperB.run();
+  stepperC.run();
   // Run motors. Free up the planner if motors have finished, in order to take another command
-  if(!steppers.run()){
+  //if(!steppers.run()){
+  if(!stepperA.isRunning() && !stepperB.isRunning() && !stepperC.isRunning()){
     plan.next();
   }
 }
