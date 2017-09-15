@@ -29,31 +29,40 @@ void DeltaRobot::stepper_choreography(int mode = 0){
   if(mode == 0){
     int i = 0;
     while(i<120){
-      plan.put(80*cos(i), 80*sin(i), -300);
+      plan.put(80*cos(i), 80*sin(i), -320);
+      i += 6;
+    }
+    i = 0;
+    while(i<120){
+      plan.put(40*cos(i), 40*sin(i), -240);
       i += 6;
     }
   }
   
+  // pick and place
   if(mode == 1){
-    /*int j = 0;
-    while(j<4){
-      plan.put(0, 0, -280);
-      plan.put(80, 80, -310);
-      plan.put(0, 0, -280);
-      plan.put(-80, -80, -310);
-      j++;
-    }*/
-
-    // sigmoid
-    for(float j=-80.0; j<80.0; j++){
-      float sigmoid = 80.0 / (1.0 + exp(-0.05 * j));
-      //debug.print((String)j);
-      //debug.print(" - ");
-      //debug.println((String)sigmoid);
-      plan.put(j, sigmoid, -300);
+    float j = 0.0;
+    float y = 8.0;
+    while(j<160){
+      y = -y;
+      plan.put(j-80.0, y, -310.0);
+      plan.put(j-72.0, 0, -290.0);
+      j = j + 8.0;
     }
 
   }
+
+  if(mode == 2){
+    // sigmoid
+    for(float j=-80.0; j<80.0; j++){
+      float sigmoid = 160.0 / (1.0 + exp(-0.05 * j));
+      plan.put(j, sigmoid-80, -300);
+    }
+
+  }
+
+
+
   plan.put(0, 0, -300);
 }
 

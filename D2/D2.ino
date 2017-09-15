@@ -38,6 +38,7 @@ void process_serial(){
     case 'H': help(); break;
     case 'C': delta.stepper_choreography(0); break;
     case 'P': delta.stepper_choreography(1); break;
+    case 'S': delta.stepper_choreography(2); break;
 
     case 'K': 
       float pos1 = Serial.parseFloat(); 
@@ -59,5 +60,6 @@ void help() {
   Serial.println(F("H: will print this help message again"));
   Serial.println(F("C: Little choreography"));
   Serial.println(F("P: P&P choreography"));
+  Serial.println(F("S: Sigmoid choreography"));
   Serial.println(F("K1,2,-3: Inverse Kinematics (X,Y,Z) -> (1,2,-3)"));
 }
