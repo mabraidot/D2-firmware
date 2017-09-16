@@ -31,5 +31,5 @@
 
 /** GENERAL CONFIGURATIONS  **/
 #define DEBUG              true
-#define RING_BUFFER_SIZE   256
+#define RING_BUFFER_SIZE   255
 

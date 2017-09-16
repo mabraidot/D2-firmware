@@ -1,3 +1,4 @@
+#include "Configurations.h"
 #include "Debug.h"
 #include "Planner.h"
 #include "Kinematics.h"
@@ -196,7 +197,7 @@ void Planner::putAngle(float XTheta, float YTheta, float ZTheta)
 void Planner::put(float XPosition, float YPosition, float ZPosition)
 {
   if(count < RING_BUFFER_SIZE){
-
+  
     kinematics.inverseKinematic(XPosition, YPosition, ZPosition);
     
     /*debug.println("");

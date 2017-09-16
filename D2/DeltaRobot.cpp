@@ -29,15 +29,16 @@ void DeltaRobot::stepper_choreography(int mode = 0){
   if(mode == 0){
     int i = 0;
     float rads = 0;
-    while(i<360){
-      rads = i*3.1415/180;
-      plan.put(100*cos(rads), 100*sin(rads), -300);
+    while(i<=360){
+      rads = i*3.1415/180.0;
+      plan.put(110*cos(rads), 110*sin(rads), -300);
       i += 3;
     }
     i = 0;
-    while(i<360){
+    rads = 0;
+    while(i<=360){
       rads = i*3.1415/180;
-      plan.put(40*cos(rads), 40*sin(rads), -240);
+      plan.put(50*cos(rads), 50*sin(rads), -240);
       i += 3;
     }
   }
@@ -45,21 +46,21 @@ void DeltaRobot::stepper_choreography(int mode = 0){
   // pick and place
   if(mode == 1){
     float j = 0.0;
-    float y = 8.0;
-    while(j<160){
+    float y = 20.0;
+    while(j<240){
       y = -y;
-      plan.put(j-80.0, y, -310.0);
-      plan.put(j-72.0, 0, -290.0);
-      j = j + 8.0;
+      plan.put(j-120.0, y, -310.0);
+      plan.put(j-100.0, 0, -290.0);
+      j = j + 20.0;
     }
 
   }
 
   if(mode == 2){
     // sigmoid
-    for(float j=-80.0; j<80.0; j++){
-      float sigmoid = 160.0 / (1.0 + exp(-0.05 * j));
-      plan.put(j, sigmoid-80, -300);
+    for(float j=-100.0; j<100.0; j++){
+      float sigmoid = 200.0 / (1.0 + exp(-0.05 * j));
+      plan.put(j, sigmoid-100, -300);
     }
 
   }
@@ -219,15 +220,15 @@ void DeltaRobot::run()
       arms[2].position = stepperC.currentPosition();
 		}
     
-  }
-  
-  stepperA.run();
-  stepperB.run();
-  stepperC.run();
-  // Run motors. Free up the planner if motors have finished, in order to take another command
-  //if(!steppers.run()){
-  if(!stepperA.isRunning() && !stepperB.isRunning() && !stepperC.isRunning()){
-    plan.next();
+    stepperA.run();
+    stepperB.run();
+    stepperC.run();
+    // Run motors. Free up the planner if motors have finished, in order to take another command
+    //if(!steppers.run()){
+    if(!stepperA.isRunning() && !stepperB.isRunning() && !stepperC.isRunning()){
+      plan.next();
+    }
+
   }
 }
 
