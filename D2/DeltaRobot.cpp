@@ -176,6 +176,15 @@ void DeltaRobot::run()
     
     if(!plan.isBusy()){
 
+      float speed = 10000.0;
+      stepperA.setMaxSpeed(speed);
+      stepperB.setMaxSpeed(speed);
+      stepperC.setMaxSpeed(speed);
+      stepperA.setAcceleration(speed*2);
+      stepperB.setAcceleration(speed*2);
+      stepperC.setAcceleration(speed*2);
+      
+
       positions[0] = angle2steps(plan.getXTheta());
       positions[1] = angle2steps(plan.getYTheta());
       positions[2] = angle2steps(plan.getZTheta());
