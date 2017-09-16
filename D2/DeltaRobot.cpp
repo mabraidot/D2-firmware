@@ -28,14 +28,17 @@ void DeltaRobot::stepper_choreography(int mode = 0){
   // circle
   if(mode == 0){
     int i = 0;
-    while(i<120){
-      plan.put(80*cos(i), 80*sin(i), -320);
-      i += 6;
+    float rads = 0;
+    while(i<360){
+      rads = i*3.1415/180;
+      plan.put(100*cos(rads), 100*sin(rads), -300);
+      i += 3;
     }
     i = 0;
-    while(i<120){
-      plan.put(40*cos(i), 40*sin(i), -240);
-      i += 6;
+    while(i<360){
+      rads = i*3.1415/180;
+      plan.put(40*cos(rads), 40*sin(rads), -240);
+      i += 3;
     }
   }
   
