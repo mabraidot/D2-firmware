@@ -37,9 +37,9 @@ void process_serial(){
   switch (cmd) {
     case '?': help(); break;
     case 'H': delta.homing(); break;
-    case 'C': delta.stepper_choreography(0); break;
-    case 'P': delta.stepper_choreography(1); break;
-    case 'S': delta.stepper_choreography(2); break;
+    case 'C': delta.choreography = 1; break;
+    case 'P': delta.choreography = 2; break;
+    case 'S': delta.choreography = 3; break;
 
     case 'K': 
       float pos1 = Serial.parseFloat(); 

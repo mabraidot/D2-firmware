@@ -7,6 +7,7 @@ class DeltaRobot {
 
   public:
     DeltaRobot(){};
+    char choreography = 0;
     typedef struct 
     {
       long position;
@@ -19,7 +20,7 @@ class DeltaRobot {
 		long angle2steps(float angle);
 
     // delete. testing only
-    void stepper_choreography(int mode);
+    void stepper_choreography(int mode, boolean not_busy);
     
 
   private:

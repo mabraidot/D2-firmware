@@ -22,9 +22,63 @@ long positions[3]; // Array of desired stepper positions
 boolean running = false;
 
 // @TODO: remove this!, it is only for demonstration purpose
-void DeltaRobot::stepper_choreography(int mode = 0){
+void DeltaRobot::stepper_choreography(int mode = 0, boolean not_busy = true){
 
-  plan.put(0, 0, -300);
+  static boolean delta_not_busy = not_busy;
+  static boolean delta_start_centered = false;
+  static boolean delta_end_centered = false;
+  static boolean delta_mode1_finished = false;
+  static int i, j = 0;
+  static float rads = 0;
+
+  // do the opening movement
+  if(delta_not_busy){
+    if(!delta_start_centered){
+      delta_not_busy = delta_start_centered = plan.put(0, 0, -300);
+    }
+  }
+
+  // CIRCLE
+  if(mode == 1){
+    if(!delta_mode1_finished){
+      if(delta_not_busy && i <= 360){
+        rads = i*3.1415/180.0;
+        delta_not_busy = plan.put(110*cos(rads), 110*sin(rads), -300);
+        i += 2;
+        debug.println("iiiiiiii ----------------------------> ");
+        debug.println((String)i);
+      }
+      if(delta_not_busy && i > 360 && j <= 360){
+        rads = j*3.1415/180.0;
+        delta_not_busy = plan.put(50*cos(rads), 50*sin(rads), -240);
+        j += 2;
+        debug.println("jjjjjjjj ----------------------------> ");
+        debug.println((String)j);
+      }
+      if(i > 360 && j > 360){
+        delta_mode1_finished = true;
+      }
+
+    }else if(delta_not_busy && !delta_end_centered){
+      delta_end_centered = plan.put(0, 0, -300);
+    }
+  }
+
+  if(delta_end_centered && delta_mode1_finished){
+
+    debug.println("fin ----------------------------> ");
+    
+    choreography = 0;
+
+    delta_not_busy = true;
+    delta_start_centered = false;
+    delta_mode1_finished = false;
+    delta_end_centered = false;
+    i = j = 0;
+  }
+
+
+  /*plan.put(0, 0, -300);
   // circle
   if(mode == 0){
     int i = 0;
@@ -67,7 +121,8 @@ void DeltaRobot::stepper_choreography(int mode = 0){
 
 
 
-  plan.put(0, 0, -300);
+  plan.put(0, 0, -300);*/
+
 }
 
 
@@ -145,7 +200,8 @@ void DeltaRobot::homing(){
     
 void DeltaRobot::init()
 {
-  
+  choreography = 0;
+
   pinMode(X_STEP_PIN, OUTPUT);
   pinMode(X_DIR_PIN, OUTPUT);
   pinMode(X_ENABLE_PIN, OUTPUT);
@@ -229,6 +285,12 @@ void DeltaRobot::run()
       plan.next();
     }
 
+  }
+
+  if(choreography > 0){
+    if(!plan.isFull()){
+      stepper_choreography(choreography, true);
+    }
   }
 }
 
