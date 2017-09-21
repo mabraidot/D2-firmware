@@ -44,16 +44,16 @@ void DeltaRobot::stepper_choreography(int mode = 0, boolean not_busy = true){
       if(delta_not_busy && i <= 360){
         rads = i*3.1415/180.0;
         delta_not_busy = plan.put(110*cos(rads), 110*sin(rads), -300);
-        i += 2;
-        debug.println("iiiiiiii ----------------------------> ");
-        debug.println((String)i);
+        i += 3;
+        //debug.println("iiiiiiii ----------------------------> ");
+        //debug.println((String)i);
       }
       if(delta_not_busy && i > 360 && j <= 360){
         rads = j*3.1415/180.0;
         delta_not_busy = plan.put(50*cos(rads), 50*sin(rads), -240);
-        j += 2;
-        debug.println("jjjjjjjj ----------------------------> ");
-        debug.println((String)j);
+        j += 3;
+        //debug.println("jjjjjjjj ----------------------------> ");
+        //debug.println((String)j);
       }
       if(i > 360 && j > 360){
         delta_mode1_finished = true;
@@ -66,7 +66,7 @@ void DeltaRobot::stepper_choreography(int mode = 0, boolean not_busy = true){
 
   if(delta_end_centered && delta_mode1_finished){
 
-    debug.println("fin ----------------------------> ");
+    debug.println("<--------- Circle end of choreography ---------> ");
     
     choreography = 0;
 
@@ -211,7 +211,8 @@ void DeltaRobot::init()
   pinMode(Z_STEP_PIN, OUTPUT);  
   pinMode(Z_DIR_PIN, OUTPUT); 
   pinMode(Z_ENABLE_PIN, OUTPUT);
-  
+  pinMode(MAGNET, OUTPUT); 
+
   endstops.init();
   plan.init(true);
   homing();

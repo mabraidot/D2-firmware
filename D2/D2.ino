@@ -30,6 +30,17 @@ void loop() {
   
 }
 
+void pruebaiman(){
+  digitalWrite(MAGNET, HIGH);
+  delay(500);
+  digitalWrite(MAGNET, LOW);
+  delay(1000);
+  digitalWrite(MAGNET, HIGH);
+  delay(500);
+  digitalWrite(MAGNET, LOW);
+  delay(1000);
+
+}
 
 void process_serial(){
   char cmd = Serial.read();
@@ -40,6 +51,7 @@ void process_serial(){
     case 'C': delta.choreography = 1; break;
     case 'P': delta.choreography = 2; break;
     case 'S': delta.choreography = 3; break;
+    case 'I': pruebaiman(); break;
 
     case 'K': 
       float pos1 = Serial.parseFloat(); 

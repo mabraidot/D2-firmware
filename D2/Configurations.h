@@ -17,6 +17,8 @@
 #define Z_CS_PIN           40
 #define Z_MIN_PIN          18
 
+#define MAGNET             10
+
 #define MICROSTEPS   			 2	//1, 2, 8, 16
 
 /** ROBOT GEOMETRY  **/
