@@ -51,12 +51,12 @@ void DeltaRobot::stepper_choreography(){
           if(i <= 360){
             rads = i*3.1415/180.0;
             plan.put(110*cos(rads), 110*sin(rads), -300);
-            i += 3;
+            i += 1;
           }
           if(i > 360 && j <= 360){
             rads = j*3.1415/180.0;
             plan.put(50*cos(rads), 50*sin(rads), -240);
-            j += 3;
+            j += 1;
           }
           if(i > 360 && j > 360){
             //delta_mode1_finished = true;
@@ -148,7 +148,6 @@ void DeltaRobot::setVelocity(float speed, float acceleration){
 void DeltaRobot::homing(){
   
   for(int i = 0; i < 3; i++){
-    arms[i].position = 0;
     arms[i].homed = 0;
   }
   
@@ -240,7 +239,8 @@ void DeltaRobot::run()
     
     if(!plan.isBusy()){
 
-      setVelocity(5000.0, 20000.0);
+      setVelocity(5000.0, 7000.0);
+      //setVelocity(2000.0, 0.0);
 
       positions[0] = angle2steps(plan.getXTheta());
       positions[1] = angle2steps(plan.getYTheta());
@@ -276,6 +276,7 @@ void DeltaRobot::run()
     stepperA.run();
     stepperB.run();
     stepperC.run();
+    
     // Run motors. Free up the planner if motors have finished, in order to take another command
     //if(!steppers.run()){
     if(!stepperA.isRunning() && !stepperB.isRunning() && !stepperC.isRunning()){
