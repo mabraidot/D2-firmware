@@ -33,8 +33,10 @@ void DeltaRobot::stepper_choreography(){
 
   static boolean delta_start_centered = false;
   static boolean delta_end_centered = false;
-  static boolean delta_mode1_finished = false;
+  //static boolean delta_mode1_finished = false;
+  static boolean delta_choreo_finished = false;
   static int i, j = 0;
+  static int s = -100;
   static float rads = 0;
 
   if(!plan.isFull() && choreography > 0){
@@ -43,38 +45,61 @@ void DeltaRobot::stepper_choreography(){
       delta_start_centered = plan.put(0, 0, -300);
     }
 
-    // CIRCLE
-    if(choreography == 1){
-      if(!delta_mode1_finished){
-        if(i <= 360){
-          rads = i*3.1415/180.0;
-          plan.put(110*cos(rads), 110*sin(rads), -300);
-          i += 3;
-        }
-        if(i > 360 && j <= 360){
-          rads = j*3.1415/180.0;
-          plan.put(50*cos(rads), 50*sin(rads), -240);
-          j += 3;
-        }
-        if(i > 360 && j > 360){
-          delta_mode1_finished = true;
+    if(!delta_choreo_finished){
+      
+      // CIRCLE
+      if(choreography == 1){
+        //if(!delta_mode1_finished){
+          if(i <= 360){
+            rads = i*3.1415/180.0;
+            plan.put(110*cos(rads), 110*sin(rads), -300);
+            i += 3;
+          }
+          if(i > 360 && j <= 360){
+            rads = j*3.1415/180.0;
+            plan.put(50*cos(rads), 50*sin(rads), -240);
+            j += 3;
+          }
+          if(i > 360 && j > 360){
+            //delta_mode1_finished = true;
+            delta_choreo_finished = true;
+          }
+
+        /*}else if(!delta_end_centered){
+          delta_end_centered = plan.put(0, 0, -300);
+        }*/
+
+      // SIGMOID CURVE
+      }else if(choreography == 3){
+
+        if(s<100){
+          float sigmoid = 200.0 / (1.0 + exp(-0.05 * s));
+          plan.put(s, sigmoid-100, -300);
+          s++;
+        }else{
+          delta_choreo_finished = true;
         }
 
-      }else if(!delta_end_centered){
-        delta_end_centered = plan.put(0, 0, -300);
       }
+
+    }else if(!delta_end_centered){
+      delta_end_centered = plan.put(0, 0, -300);
     }
 
-    if(delta_end_centered && delta_mode1_finished){
 
-      debug.println("<--------- Circle end of choreography ---------> ");
+    //if(delta_end_centered && delta_mode1_finished){
+    if(delta_end_centered && delta_choreo_finished){
+
+      debug.println("<--------- End of choreography ---------> ");
       
       choreography = 0;
 
       delta_start_centered = false;
-      delta_mode1_finished = false;
+      //delta_mode1_finished = false;
+      delta_choreo_finished = false;
       delta_end_centered = false;
       i = j = 0;
+      s = -100;
     }
 
   }
