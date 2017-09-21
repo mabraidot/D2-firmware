@@ -35,10 +35,8 @@ void DeltaRobot::stepper_choreography(){
   static boolean delta_end_centered = false;
   //static boolean delta_mode1_finished = false;
   static boolean delta_choreo_finished = false;
-  static int i, j = 0;
-  static int s = -100;
-  static float rads = 0;
-
+  static int i, j = 0; // circle and pick and place vars
+  
   if(!plan.isFull() && choreography > 0){
     // do the opening movement
     if(!delta_start_centered){
@@ -50,6 +48,8 @@ void DeltaRobot::stepper_choreography(){
       // CIRCLE
       if(choreography == 1){
         //if(!delta_mode1_finished){
+
+          static float rads = 0.0;
           if(i <= 360){
             rads = i*3.1415/180.0;
             plan.put(110*cos(rads), 110*sin(rads), -300);
@@ -63,21 +63,45 @@ void DeltaRobot::stepper_choreography(){
           if(i > 360 && j > 360){
             //delta_mode1_finished = true;
             delta_choreo_finished = true;
+            i = j = 0;
+            rads = 0.0;
           }
 
         /*}else if(!delta_end_centered){
           delta_end_centered = plan.put(0, 0, -300);
         }*/
 
+      // PICK AND PLACE
+      }else if(choreography == 2){
+        
+        static int y = 20; // How high in the z coordinate rise the arm
+        if(j < 240){
+
+          y = -y;
+          //plan.put((float)j-120.0, y, -310.0);
+          //plan.put((float)j-100.0, 0, -290.0);
+          plan.put((float) j-(110.0-(y/2)), (float) y/2-abs(y)/2, (float) -(300.0-(y/2)));
+
+          //j = j + 20;
+          j = j + (10+(y/2));
+
+        }else{
+          delta_choreo_finished = true;
+          y = 20;
+          j = 0;
+        }
+
       // SIGMOID CURVE
       }else if(choreography == 3){
 
+        static int s = -100;
         if(s<100){
           float sigmoid = 200.0 / (1.0 + exp(-0.05 * s));
           plan.put(s, sigmoid-100, -300);
           s++;
         }else{
           delta_choreo_finished = true;
+          s = -100;
         }
 
       }
@@ -98,8 +122,6 @@ void DeltaRobot::stepper_choreography(){
       //delta_mode1_finished = false;
       delta_choreo_finished = false;
       delta_end_centered = false;
-      i = j = 0;
-      s = -100;
     }
 
   }
