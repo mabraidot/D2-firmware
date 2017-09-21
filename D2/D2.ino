@@ -30,15 +30,28 @@ void loop() {
   
 }
 
+void pruebaiman(){
+  digitalWrite(MAGNET, HIGH);
+  delay(500);
+  digitalWrite(MAGNET, LOW);
+  delay(1000);
+  digitalWrite(MAGNET, HIGH);
+  delay(500);
+  digitalWrite(MAGNET, LOW);
+  delay(1000);
+
+}
 
 void process_serial(){
   char cmd = Serial.read();
   if (cmd > 'Z') cmd -= 32;
   switch (cmd) {
-    case 'H': help(); break;
-    case 'C': delta.stepper_choreography(0); break;
-    case 'P': delta.stepper_choreography(1); break;
-    case 'S': delta.stepper_choreography(2); break;
+    case '?': help(); break;
+    case 'H': delta.homing(); break;
+    case 'C': delta.add_choreography(1); break;
+    case 'P': delta.add_choreography(2); break;
+    case 'S': delta.add_choreography(3); break;
+    case 'I': pruebaiman(); break;
 
     case 'K': 
       float pos1 = Serial.parseFloat(); 
@@ -57,7 +70,8 @@ void help() {
   Serial.println(F("\nStepper motor interface emulator"));
   Serial.println(F("Available serial commands: (lines end with CRLF or LF)"));
   Serial.println(F(""));
-  Serial.println(F("H: will print this help message again"));
+  Serial.println(F("?: will print this help message again"));
+  Serial.println(F("H: perform a homing action"));
   Serial.println(F("C: Little choreography"));
   Serial.println(F("P: P&P choreography"));
   Serial.println(F("S: Sigmoid choreography"));

@@ -1,3 +1,4 @@
+#include "Configurations.h"
 #include "Debug.h"
 #include "Planner.h"
 #include "Kinematics.h"
@@ -182,21 +183,22 @@ float Planner::getZTheta(void)
 /**
  * Stores a new movement into the buffer. Uses forward kinematics to calculate XYZ positions
  */
-void Planner::putAngle(float XTheta, float YTheta, float ZTheta)
+boolean Planner::putAngle(float XTheta, float YTheta, float ZTheta)
 {
   kinematics.forwardKinematic(XTheta, YTheta, ZTheta);
   if(kinematics.status == 0){
-    put(kinematics.x, kinematics.y, kinematics.z);
+    return put(kinematics.x, kinematics.y, kinematics.z);
   }
+  return false;
 }
 
 /**
  * Stores a new movement into the buffer. Uses inverse kinematics to calculate angles
  */
-void Planner::put(float XPosition, float YPosition, float ZPosition)
+boolean Planner::put(float XPosition, float YPosition, float ZPosition)
 {
   if(count < RING_BUFFER_SIZE){
-
+  
     kinematics.inverseKinematic(XPosition, YPosition, ZPosition);
     
     /*debug.println("");
@@ -224,8 +226,10 @@ void Planner::put(float XPosition, float YPosition, float ZPosition)
 
       head = modulo_inc(head, RING_BUFFER_SIZE);
       ++count;
+      return true;
     }
   }
+  return false;
 }
 
 /**

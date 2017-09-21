@@ -22,53 +22,121 @@ long positions[3]; // Array of desired stepper positions
 boolean running = false;
 
 // @TODO: remove this!, it is only for demonstration purpose
-void DeltaRobot::stepper_choreography(int mode = 0){
+void DeltaRobot::add_choreography(int mode){
+  if(!plan.isFull() && choreography == 0 && mode > 0){
+    choreography = mode;
+  }else{
+    debug.println("Planner is busy. You cannot add any new movement.");
+  }
+}
+void DeltaRobot::stepper_choreography(){
 
-  plan.put(0, 0, -300);
+  static boolean delta_start_centered = false;
+  static boolean delta_end_centered = false;
+  static boolean delta_mode1_finished = false;
+  static int i, j = 0;
+  static float rads = 0;
+
+  if(!plan.isFull() && choreography > 0){
+    // do the opening movement
+    if(!delta_start_centered){
+      delta_start_centered = plan.put(0, 0, -300);
+    }
+
+    // CIRCLE
+    if(choreography == 1){
+      if(!delta_mode1_finished){
+        if(i <= 360){
+          rads = i*3.1415/180.0;
+          plan.put(110*cos(rads), 110*sin(rads), -300);
+          i += 3;
+        }
+        if(i > 360 && j <= 360){
+          rads = j*3.1415/180.0;
+          plan.put(50*cos(rads), 50*sin(rads), -240);
+          j += 3;
+        }
+        if(i > 360 && j > 360){
+          delta_mode1_finished = true;
+        }
+
+      }else if(!delta_end_centered){
+        delta_end_centered = plan.put(0, 0, -300);
+      }
+    }
+
+    if(delta_end_centered && delta_mode1_finished){
+
+      debug.println("<--------- Circle end of choreography ---------> ");
+      
+      choreography = 0;
+
+      delta_start_centered = false;
+      delta_mode1_finished = false;
+      delta_end_centered = false;
+      i = j = 0;
+    }
+
+  }
+
+  /*plan.put(0, 0, -300);
   // circle
   if(mode == 0){
     int i = 0;
-    while(i<120){
-      plan.put(80*cos(i), 80*sin(i), -320);
-      i += 6;
+    float rads = 0;
+    while(i<=360){
+      rads = i*3.1415/180.0;
+      plan.put(110*cos(rads), 110*sin(rads), -300);
+      i += 3;
     }
     i = 0;
-    while(i<120){
-      plan.put(40*cos(i), 40*sin(i), -240);
-      i += 6;
+    rads = 0;
+    while(i<=360){
+      rads = i*3.1415/180;
+      plan.put(50*cos(rads), 50*sin(rads), -240);
+      i += 3;
     }
   }
   
   // pick and place
   if(mode == 1){
     float j = 0.0;
-    float y = 8.0;
-    while(j<160){
+    float y = 20.0;
+    while(j<240){
       y = -y;
-      plan.put(j-80.0, y, -310.0);
-      plan.put(j-72.0, 0, -290.0);
-      j = j + 8.0;
+      plan.put(j-120.0, y, -310.0);
+      plan.put(j-100.0, 0, -290.0);
+      j = j + 20.0;
     }
 
   }
 
   if(mode == 2){
     // sigmoid
-    for(float j=-80.0; j<80.0; j++){
-      float sigmoid = 160.0 / (1.0 + exp(-0.05 * j));
-      plan.put(j, sigmoid-80, -300);
+    for(float j=-100.0; j<100.0; j++){
+      float sigmoid = 200.0 / (1.0 + exp(-0.05 * j));
+      plan.put(j, sigmoid-100, -300);
     }
 
   }
 
 
 
-  plan.put(0, 0, -300);
+  plan.put(0, 0, -300);*/
+
 }
 
 
 
 
+void DeltaRobot::setVelocity(float speed, float acceleration){
+  stepperA.setMaxSpeed(speed);
+  stepperB.setMaxSpeed(speed);
+  stepperC.setMaxSpeed(speed);
+  stepperA.setAcceleration(acceleration);
+  stepperB.setAcceleration(acceleration);
+  stepperC.setAcceleration(acceleration);
+}
 
 
 void DeltaRobot::homing(){
@@ -79,15 +147,9 @@ void DeltaRobot::homing(){
   }
   
   boolean homed = false;
-  float speed = 1000.0;
   float angle = -180.0;
 
-	stepperA.setMaxSpeed(speed*2);
-  stepperB.setMaxSpeed(speed*2);
-  stepperC.setMaxSpeed(speed*2);
-  stepperA.setAcceleration(speed);
-  stepperB.setAcceleration(speed);
-  stepperC.setAcceleration(speed);
+	setVelocity(2000.0, 1000.0);
   
   positions[0] = positions[1] = positions[2] = angle2steps(angle);
   stepperA.moveTo(positions[0]);
@@ -141,7 +203,8 @@ void DeltaRobot::homing(){
     
 void DeltaRobot::init()
 {
-  
+  choreography = 0;
+
   pinMode(X_STEP_PIN, OUTPUT);
   pinMode(X_DIR_PIN, OUTPUT);
   pinMode(X_ENABLE_PIN, OUTPUT);
@@ -151,19 +214,14 @@ void DeltaRobot::init()
   pinMode(Z_STEP_PIN, OUTPUT);  
   pinMode(Z_DIR_PIN, OUTPUT); 
   pinMode(Z_ENABLE_PIN, OUTPUT);
-  
+  pinMode(MAGNET, OUTPUT); 
+
   endstops.init();
   plan.init(true);
   homing();
 
-  float speed = 10000.0;
-  stepperA.setMaxSpeed(speed);
-  stepperB.setMaxSpeed(speed);
-  stepperC.setMaxSpeed(speed);
-  stepperA.setAcceleration(speed*2);
-  stepperB.setAcceleration(speed*2);
-  stepperC.setAcceleration(speed*2);
-  
+  setVelocity(5000.0, 20000.0);
+
   steppers.addStepper(stepperA);
   steppers.addStepper(stepperB);
   steppers.addStepper(stepperC);
@@ -175,6 +233,8 @@ void DeltaRobot::run()
   if(!plan.isEmpty()){
     
     if(!plan.isBusy()){
+
+      setVelocity(5000.0, 20000.0);
 
       positions[0] = angle2steps(plan.getXTheta());
       positions[1] = angle2steps(plan.getYTheta());
@@ -207,16 +267,19 @@ void DeltaRobot::run()
       arms[2].position = stepperC.currentPosition();
 		}
     
+    stepperA.run();
+    stepperB.run();
+    stepperC.run();
+    // Run motors. Free up the planner if motors have finished, in order to take another command
+    //if(!steppers.run()){
+    if(!stepperA.isRunning() && !stepperB.isRunning() && !stepperC.isRunning()){
+      plan.next();
+    }
+
   }
-  
-  stepperA.run();
-  stepperB.run();
-  stepperC.run();
-  // Run motors. Free up the planner if motors have finished, in order to take another command
-  //if(!steppers.run()){
-  if(!stepperA.isRunning() && !stepperB.isRunning() && !stepperC.isRunning()){
-    plan.next();
-  }
+
+  stepper_choreography();
+
 }
 
 /**

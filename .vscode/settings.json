@@ -1,6 +1,11 @@
 {
     "files.associations": {
         "*.tcc": "cpp",
-        "rope": "cpp"
+        "rope": "cpp",
+        "bitset": "cpp",
+        "chrono": "cpp",
+        "algorithm": "cpp",
+        "cmath": "cpp",
+        "complex": "cpp"
     }
 }

@@ -29,8 +29,8 @@ class Planner
     float       getZTheta  (void);
     ringBuffer  get     (void);
     void        next    (void);
-    void        put     (float XPosition, float YPosition, float ZPosition);
-    void        putAngle(float XTheta, float YTheta, float ZTheta);
+    boolean     put     (float XPosition, float YPosition, float ZPosition);
+    boolean     putAngle(float XTheta, float YTheta, float ZTheta);
     ringBuffer  bufferQueue[RING_BUFFER_SIZE];
     
   private:
