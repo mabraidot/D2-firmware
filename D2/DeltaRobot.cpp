@@ -33,7 +33,6 @@ void DeltaRobot::stepper_choreography(){
 
   static boolean delta_start_centered = false;
   static boolean delta_end_centered = false;
-  //static boolean delta_mode1_finished = false;
   static boolean delta_choreo_finished = false;
   static int i, j = 0; // circle and pick and place vars
   
@@ -47,7 +46,6 @@ void DeltaRobot::stepper_choreography(){
       
       // CIRCLE
       if(choreography == 1){
-        //if(!delta_mode1_finished){
 
           static float rads = 0.0;
           if(i <= 360){
@@ -67,27 +65,34 @@ void DeltaRobot::stepper_choreography(){
             rads = 0.0;
           }
 
-        /*}else if(!delta_end_centered){
-          delta_end_centered = plan.put(0, 0, -300);
-        }*/
-
       // PICK AND PLACE
       }else if(choreography == 2){
         
         static int y = 20; // How high in the z coordinate rise the arm
+        static int yy = 0; // y position
+        static bool yyy = false; // does y coordinate went through negative position already
         if(j < 240){
 
           y = -y;
-          //plan.put((float)j-120.0, y, -310.0);
-          //plan.put((float)j-100.0, 0, -290.0);
-          plan.put((float) j-(110.0-(y/2)), (float) y/2-abs(y)/2, (float) -(300.0-(y/2)));
+          yy = y/2-abs(y)/2;
+          if(yy < 0){
+            if(yyy){
+              yy *= -1;
+              yyy = false;
+            }else{
+              yyy = true;
+            }
 
-          //j = j + 20;
+          }
+          plan.put((float) j-(110.0-(y/2)), (float) yy, (float) -(300.0-(y/2)));
+          
           j = j + (10+(y/2));
 
         }else{
           delta_choreo_finished = true;
           y = 20;
+          yy = 0;
+          yyy = false;
           j = 0;
         }
 
@@ -119,57 +124,11 @@ void DeltaRobot::stepper_choreography(){
       choreography = 0;
 
       delta_start_centered = false;
-      //delta_mode1_finished = false;
       delta_choreo_finished = false;
       delta_end_centered = false;
     }
 
   }
-
-  /*plan.put(0, 0, -300);
-  // circle
-  if(mode == 0){
-    int i = 0;
-    float rads = 0;
-    while(i<=360){
-      rads = i*3.1415/180.0;
-      plan.put(110*cos(rads), 110*sin(rads), -300);
-      i += 3;
-    }
-    i = 0;
-    rads = 0;
-    while(i<=360){
-      rads = i*3.1415/180;
-      plan.put(50*cos(rads), 50*sin(rads), -240);
-      i += 3;
-    }
-  }
-  
-  // pick and place
-  if(mode == 1){
-    float j = 0.0;
-    float y = 20.0;
-    while(j<240){
-      y = -y;
-      plan.put(j-120.0, y, -310.0);
-      plan.put(j-100.0, 0, -290.0);
-      j = j + 20.0;
-    }
-
-  }
-
-  if(mode == 2){
-    // sigmoid
-    for(float j=-100.0; j<100.0; j++){
-      float sigmoid = 200.0 / (1.0 + exp(-0.05 * j));
-      plan.put(j, sigmoid-100, -300);
-    }
-
-  }
-
-
-
-  plan.put(0, 0, -300);*/
 
 }
 
