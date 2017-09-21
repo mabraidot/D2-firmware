@@ -22,61 +22,62 @@ long positions[3]; // Array of desired stepper positions
 boolean running = false;
 
 // @TODO: remove this!, it is only for demonstration purpose
-void DeltaRobot::stepper_choreography(int mode = 0, boolean not_busy = true){
+void DeltaRobot::add_choreography(int mode){
+  if(!plan.isFull() && choreography == 0 && mode > 0){
+    choreography = mode;
+  }else{
+    debug.println("Planner is busy. You cannot add any new movement.");
+  }
+}
+void DeltaRobot::stepper_choreography(){
 
-  static boolean delta_not_busy = not_busy;
   static boolean delta_start_centered = false;
   static boolean delta_end_centered = false;
   static boolean delta_mode1_finished = false;
   static int i, j = 0;
   static float rads = 0;
 
-  // do the opening movement
-  if(delta_not_busy){
+  if(!plan.isFull() && choreography > 0){
+    // do the opening movement
     if(!delta_start_centered){
-      delta_not_busy = delta_start_centered = plan.put(0, 0, -300);
+      delta_start_centered = plan.put(0, 0, -300);
     }
-  }
 
-  // CIRCLE
-  if(mode == 1){
-    if(!delta_mode1_finished){
-      if(delta_not_busy && i <= 360){
-        rads = i*3.1415/180.0;
-        delta_not_busy = plan.put(110*cos(rads), 110*sin(rads), -300);
-        i += 3;
-        //debug.println("iiiiiiii ----------------------------> ");
-        //debug.println((String)i);
-      }
-      if(delta_not_busy && i > 360 && j <= 360){
-        rads = j*3.1415/180.0;
-        delta_not_busy = plan.put(50*cos(rads), 50*sin(rads), -240);
-        j += 3;
-        //debug.println("jjjjjjjj ----------------------------> ");
-        //debug.println((String)j);
-      }
-      if(i > 360 && j > 360){
-        delta_mode1_finished = true;
-      }
+    // CIRCLE
+    if(choreography == 1){
+      if(!delta_mode1_finished){
+        if(i <= 360){
+          rads = i*3.1415/180.0;
+          plan.put(110*cos(rads), 110*sin(rads), -300);
+          i += 3;
+        }
+        if(i > 360 && j <= 360){
+          rads = j*3.1415/180.0;
+          plan.put(50*cos(rads), 50*sin(rads), -240);
+          j += 3;
+        }
+        if(i > 360 && j > 360){
+          delta_mode1_finished = true;
+        }
 
-    }else if(delta_not_busy && !delta_end_centered){
-      delta_end_centered = plan.put(0, 0, -300);
+      }else if(!delta_end_centered){
+        delta_end_centered = plan.put(0, 0, -300);
+      }
     }
+
+    if(delta_end_centered && delta_mode1_finished){
+
+      debug.println("<--------- Circle end of choreography ---------> ");
+      
+      choreography = 0;
+
+      delta_start_centered = false;
+      delta_mode1_finished = false;
+      delta_end_centered = false;
+      i = j = 0;
+    }
+
   }
-
-  if(delta_end_centered && delta_mode1_finished){
-
-    debug.println("<--------- Circle end of choreography ---------> ");
-    
-    choreography = 0;
-
-    delta_not_busy = true;
-    delta_start_centered = false;
-    delta_mode1_finished = false;
-    delta_end_centered = false;
-    i = j = 0;
-  }
-
 
   /*plan.put(0, 0, -300);
   // circle
@@ -128,6 +129,14 @@ void DeltaRobot::stepper_choreography(int mode = 0, boolean not_busy = true){
 
 
 
+void DeltaRobot::setVelocity(float speed, float acceleration){
+  stepperA.setMaxSpeed(speed);
+  stepperB.setMaxSpeed(speed);
+  stepperC.setMaxSpeed(speed);
+  stepperA.setAcceleration(acceleration);
+  stepperB.setAcceleration(acceleration);
+  stepperC.setAcceleration(acceleration);
+}
 
 
 void DeltaRobot::homing(){
@@ -138,15 +147,9 @@ void DeltaRobot::homing(){
   }
   
   boolean homed = false;
-  float speed = 1000.0;
   float angle = -180.0;
 
-	stepperA.setMaxSpeed(speed*2);
-  stepperB.setMaxSpeed(speed*2);
-  stepperC.setMaxSpeed(speed*2);
-  stepperA.setAcceleration(speed);
-  stepperB.setAcceleration(speed);
-  stepperC.setAcceleration(speed);
+	setVelocity(2000.0, 1000.0);
   
   positions[0] = positions[1] = positions[2] = angle2steps(angle);
   stepperA.moveTo(positions[0]);
@@ -217,14 +220,8 @@ void DeltaRobot::init()
   plan.init(true);
   homing();
 
-  float speed = 10000.0;
-  stepperA.setMaxSpeed(speed);
-  stepperB.setMaxSpeed(speed);
-  stepperC.setMaxSpeed(speed);
-  stepperA.setAcceleration(speed*2);
-  stepperB.setAcceleration(speed*2);
-  stepperC.setAcceleration(speed*2);
-  
+  setVelocity(5000.0, 20000.0);
+
   steppers.addStepper(stepperA);
   steppers.addStepper(stepperB);
   steppers.addStepper(stepperC);
@@ -237,14 +234,7 @@ void DeltaRobot::run()
     
     if(!plan.isBusy()){
 
-      float speed = 10000.0;
-      stepperA.setMaxSpeed(speed);
-      stepperB.setMaxSpeed(speed);
-      stepperC.setMaxSpeed(speed);
-      stepperA.setAcceleration(speed*2);
-      stepperB.setAcceleration(speed*2);
-      stepperC.setAcceleration(speed*2);
-      
+      setVelocity(5000.0, 20000.0);
 
       positions[0] = angle2steps(plan.getXTheta());
       positions[1] = angle2steps(plan.getYTheta());
@@ -288,11 +278,8 @@ void DeltaRobot::run()
 
   }
 
-  if(choreography > 0){
-    if(!plan.isFull()){
-      stepper_choreography(choreography, true);
-    }
-  }
+  stepper_choreography();
+
 }
 
 /**
