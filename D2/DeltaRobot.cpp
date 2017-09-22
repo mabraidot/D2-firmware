@@ -39,7 +39,7 @@ void DeltaRobot::stepper_choreography(){
   if(!plan.isFull() && choreography > 0){
     // do the opening movement
     if(!delta_start_centered){
-      delta_start_centered = plan.put(0, 0, -300);
+      delta_start_centered = plan.put(0, 0, -330);
     }
 
     if(!delta_choreo_finished){
@@ -50,12 +50,12 @@ void DeltaRobot::stepper_choreography(){
           static float rads = 0.0;
           if(i <= 360){
             rads = i*3.1415/180.0;
-            plan.put(110*cos(rads), 110*sin(rads), -300);
+            plan.put(110*cos(rads), 110*sin(rads), -330);
             i += 1;
           }
           if(i > 360 && j <= 360){
             rads = j*3.1415/180.0;
-            plan.put(50*cos(rads), 50*sin(rads), -240);
+            plan.put(50*cos(rads), 50*sin(rads), -280);
             j += 1;
           }
           if(i > 360 && j > 360){
@@ -68,7 +68,7 @@ void DeltaRobot::stepper_choreography(){
       // PICK AND PLACE
       }else if(choreography == 2){
         
-        static int y = 20; // How high in the z coordinate rise the arm
+        static int y = 40; // How high in the z coordinate rise the arm
         static int yy = 0; // y position
         static bool yyy = false; // does y coordinate went through negative position already
         if(j < 240){
@@ -102,7 +102,7 @@ void DeltaRobot::stepper_choreography(){
         static int s = -100;
         if(s<100){
           float sigmoid = 200.0 / (1.0 + exp(-0.05 * s));
-          plan.put(s, sigmoid-100, -300);
+          plan.put(s, sigmoid-100, -320);
           s++;
         }else{
           delta_choreo_finished = true;
@@ -112,7 +112,7 @@ void DeltaRobot::stepper_choreography(){
       }
 
     }else if(!delta_end_centered){
-      delta_end_centered = plan.put(0, 0, -300);
+      delta_end_centered = plan.put(0, 0, -330);
     }
 
 
@@ -195,9 +195,9 @@ void DeltaRobot::homing(){
 
   // We set the new initial position. Horizontal arm is considered the zero angle.
   angle = -75.0;
-  arms[0].position = angle2steps(angle - DELTA_X_OFFSET);
-  arms[1].position = angle2steps(angle - DELTA_Y_OFFSET);
-  arms[2].position = angle2steps(angle - DELTA_Z_OFFSET);
+  arms[0].position = angle2steps(angle + (DELTA_X_OFFSET));
+  arms[1].position = angle2steps(angle + (DELTA_Y_OFFSET));
+  arms[2].position = angle2steps(angle + (DELTA_Z_OFFSET));
   stepperA.setCurrentPosition(arms[0].position);
   stepperB.setCurrentPosition(arms[1].position);
   stepperC.setCurrentPosition(arms[2].position);
