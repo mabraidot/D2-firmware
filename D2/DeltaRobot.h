@@ -15,6 +15,7 @@ class DeltaRobot {
     
     void homing(void);
     void setVelocity(float speed, float acceleration);
+    void setToolState(const bool state);
     void init(void);
     void run(void);
 		long angle2steps(float angle);

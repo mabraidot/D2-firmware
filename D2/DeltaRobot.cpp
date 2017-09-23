@@ -51,12 +51,12 @@ void DeltaRobot::stepper_choreography(){
           if(i <= 360){
             rads = i*3.1415/180.0;
             plan.put(110*cos(rads), 110*sin(rads), -330);
-            i += 1;
+            i += 6;
           }
           if(i > 360 && j <= 360){
             rads = j*3.1415/180.0;
             plan.put(50*cos(rads), 50*sin(rads), -280);
-            j += 1;
+            j += 6;
           }
           if(i > 360 && j > 360){
             //delta_mode1_finished = true;
@@ -133,7 +133,14 @@ void DeltaRobot::stepper_choreography(){
 }
 
 
-
+// Turn on/off the end effector
+void DeltaRobot::setToolState(const bool state){
+  if(state){
+    digitalWrite(MAGNET, HIGH);
+  }else{
+    digitalWrite(MAGNET, LOW);
+  }
+}
 
 void DeltaRobot::setVelocity(float speed, float acceleration){
   stepperA.setMaxSpeed(speed);
@@ -264,6 +271,8 @@ void DeltaRobot::run()
       stepperA.moveTo(positions[0]);
       stepperB.moveTo(positions[1]);
       stepperC.moveTo(positions[2]);
+
+      setToolState(plan.getToolState());
       
 
     }else{

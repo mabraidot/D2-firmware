@@ -21,6 +21,8 @@ class Planner
 		int         isBusy	(void);    
 		int         isEmpty (void);
     int         isFull  (void);
+    int         getToolState  (void);
+    void        setToolState  (const bool state);
     float       getXPosition  (void);
     float       getYPosition  (void);
     float       getZPosition  (void);
@@ -30,10 +32,13 @@ class Planner
     ringBuffer  get     (void);
     void        next    (void);
     boolean     put     (float XPosition, float YPosition, float ZPosition);
+    boolean     put     (float XPosition, float YPosition, float ZPosition, const bool setTool, const bool toolState);
     boolean     putAngle(float XTheta, float YTheta, float ZTheta);
+    boolean     putAngle(float XTheta, float YTheta, float ZTheta, const bool setTool, const bool toolState);
     ringBuffer  bufferQueue[RING_BUFFER_SIZE];
     
   private:
+    volatile bool tool;
     volatile unsigned char tail;
     volatile unsigned char head;
     volatile unsigned char count;

@@ -13,6 +13,7 @@ Kinematics kinematics = Kinematics();
   typedef struct
   {
     bool    busy;
+    bool    tool;
     float   XPosition;
     float   YPosition;
 		float   ZPosition;
@@ -38,6 +39,7 @@ void Planner::init (const bool clearBuffer)
     if(clearBuffer){
       memset (bufferQueue, 0.00, sizeof (*bufferQueue));
     }
+    tool = false;
     tail = 0;
     head = 0;
     count = 0;
@@ -66,6 +68,15 @@ int Planner::isBusy()
 {
 	return bufferQueue[tail].busy;
 }
+
+
+/**
+ * Is the tool turned on?.
+ */
+ int Planner::getToolState()
+ {
+   return tool;
+ }
 
 /**
  * Moves the tail one step further, if there is more movements to step into.
@@ -183,11 +194,14 @@ float Planner::getZTheta(void)
 /**
  * Stores a new movement into the buffer. Uses forward kinematics to calculate XYZ positions
  */
-boolean Planner::putAngle(float XTheta, float YTheta, float ZTheta)
+boolean Planner::putAngle(float XTheta, float YTheta, float ZTheta){
+  return putAngle(XTheta, YTheta, ZTheta, false, false);
+}
+boolean Planner::putAngle(float XTheta, float YTheta, float ZTheta, const bool setTool = false, const bool toolState = false)
 {
   kinematics.forwardKinematic(XTheta, YTheta, ZTheta);
   if(kinematics.status == 0){
-    return put(kinematics.x, kinematics.y, kinematics.z);
+    return put(kinematics.x, kinematics.y, kinematics.z, setTool, toolState);
   }
   return false;
 }
@@ -195,7 +209,10 @@ boolean Planner::putAngle(float XTheta, float YTheta, float ZTheta)
 /**
  * Stores a new movement into the buffer. Uses inverse kinematics to calculate angles
  */
-boolean Planner::put(float XPosition, float YPosition, float ZPosition)
+boolean Planner::put(float XPosition, float YPosition, float ZPosition){
+  return put(XPosition, YPosition, ZPosition, false, false);
+}
+boolean Planner::put(float XPosition, float YPosition, float ZPosition, const bool setTool = false, const bool toolState = false)
 {
   if(count < RING_BUFFER_SIZE){
   
@@ -211,14 +228,17 @@ boolean Planner::put(float XPosition, float YPosition, float ZPosition)
     debug.println((String)kinematics.theta2);
     debug.println((String)kinematics.theta3);
     */
+    
     // If intended movement is possible
     if(kinematics.status == 0){
       
       bufferQueue[head].XPosition = XPosition;
       bufferQueue[head].YPosition = YPosition;
       bufferQueue[head].ZPosition = ZPosition;
-      //bufferQueue[head].busy = (head == tail) ? true : false;
       bufferQueue[head].busy = false;
+      if(setTool){
+        setToolState(toolState);
+      }
     
       bufferQueue[head].XTheta = kinematics.theta1;
       bufferQueue[head].YTheta = kinematics.theta2;
@@ -230,6 +250,11 @@ boolean Planner::put(float XPosition, float YPosition, float ZPosition)
     }
   }
   return false;
+}
+
+
+void Planner::setToolState(const bool state){
+  tool = state;
 }
 
 /**

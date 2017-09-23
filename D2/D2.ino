@@ -30,17 +30,6 @@ void loop() {
   
 }
 
-void pruebaiman(){
-  digitalWrite(MAGNET, HIGH);
-  delay(500);
-  digitalWrite(MAGNET, LOW);
-  delay(1000);
-  digitalWrite(MAGNET, HIGH);
-  delay(500);
-  digitalWrite(MAGNET, LOW);
-  delay(1000);
-
-}
 
 void process_serial(){
   char cmd = Serial.read();
@@ -51,13 +40,19 @@ void process_serial(){
     case 'C': delta.add_choreography(1); break;
     case 'P': delta.add_choreography(2); break;
     case 'S': delta.add_choreography(3); break;
-    case 'I': pruebaiman(); break;
-
+    
     case 'K': 
       float pos1 = Serial.parseFloat(); 
       float pos2 = Serial.parseFloat(); 
       float pos3 = Serial.parseFloat(); 
-      plan.put(pos1, pos2, pos3); 
+      int pos4 = Serial.parseInt(); 
+      if(pos4){
+        int pos5 = Serial.parseInt(); 
+        plan.put(pos1, pos2, pos3, true, pos5); 
+      }else{
+        debug.println("no tocar el iman");
+        plan.put(pos1, pos2, pos3); 
+      }
       break;
     
   }
