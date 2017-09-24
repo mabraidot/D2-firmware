@@ -22,13 +22,13 @@
 #define MICROSTEPS   			 2	//1, 2, 8, 16
 
 /** ROBOT GEOMETRY  **/
-#define DELTA_E                 33.00  // end effector to wrist radius
-#define DELTA_F                 70.00  // base to shoulder radius
-#define DELTA_RE                331 // forearm length
-#define DELTA_RF                101.10  // arm length
+#define DELTA_E                 76.21  // end effector to wrist radius  // 33.00
+#define DELTA_F                 205.00 // base to shoulder radius       // 70.00
+#define DELTA_RE                330.00 // forearm length                // 224.00
+#define DELTA_RF                102.10  // arm length                   // 101.20
 #define DELTA_GEAR_RATIO        6.82    // 150 theet big pulley / 22 theet small pulley
 #define DELTA_X_OFFSET          11     // angle compensation for axis after homing
-#define DELTA_Y_OFFSET          9     // angle compensation for axis after homing
+#define DELTA_Y_OFFSET          10   // angle compensation for axis after homing
 #define DELTA_Z_OFFSET          11     // angle compensation for axis after homing
 
 /** GENERAL CONFIGURATIONS  **/
