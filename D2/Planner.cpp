@@ -13,7 +13,7 @@ Kinematics kinematics = Kinematics();
   typedef struct
   {
     bool    busy;
-    bool    tool;
+    int    tool;
     float   XPosition;
     float   YPosition;
 		float   ZPosition;
@@ -39,7 +39,6 @@ void Planner::init (const bool clearBuffer)
     if(clearBuffer){
       memset (bufferQueue, 0.00, sizeof (*bufferQueue));
     }
-    tool = false;
     tail = 0;
     head = 0;
     count = 0;
@@ -73,10 +72,10 @@ int Planner::isBusy()
 /**
  * Is the tool turned on?.
  */
- int Planner::getToolState()
- {
-   return tool;
- }
+int Planner::getToolState()
+{
+  return bufferQueue[tail].tool;
+}
 
 /**
  * Moves the tail one step further, if there is more movements to step into.
@@ -237,7 +236,9 @@ boolean Planner::put(float XPosition, float YPosition, float ZPosition, const bo
       bufferQueue[head].ZPosition = ZPosition;
       bufferQueue[head].busy = false;
       if(setTool){
-        setToolState(toolState);
+        bufferQueue[head].tool = toolState;
+      }else{
+        bufferQueue[head].tool = -1;
       }
     
       bufferQueue[head].XTheta = kinematics.theta1;
@@ -250,11 +251,6 @@ boolean Planner::put(float XPosition, float YPosition, float ZPosition, const bo
     }
   }
   return false;
-}
-
-
-void Planner::setToolState(const bool state){
-  tool = state;
 }
 
 /**

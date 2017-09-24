@@ -31,6 +31,106 @@ void loop() {
 }
 
 
+void magnet_choreography(){
+
+  plan.put(0, 0, -330);
+
+  /* 000 */
+  //plan.put(0, 0, -342);
+
+  /* CCC */
+  //r1
+  //plan.put(-25, -11, -342);
+  //plan.put(-25, 11, -342);
+  //r2
+  //plan.put(-50, -23, -342);
+  //plan.put(-50, 0, -342);
+  //plan.put(-50, 23, -342);
+  //r3
+  //plan.put(-75, -23, -342);
+  //plan.put(-75, 0, -342);
+  //plan.put(-75, 23, -342);
+
+  /* CCC bis */
+  //r3
+  //plan.put(80, -23, -342);
+  //plan.put(80, 0, -342);
+  //plan.put(80, 23, -342);
+
+  float safe_height = -310;
+  
+  plan.put(-50, -23, safe_height);
+  plan.put(-50, -23, -340);
+  plan.put(-50, -23, safe_height, 1, 1);
+  plan.put(80, -23, safe_height);
+  plan.put(80, -23, -336);
+  plan.put(80, -23, safe_height, 1, 0);
+
+  plan.put(-50, 0, safe_height);
+  plan.put(-50, 0, -340);
+  plan.put(-50, 0, safe_height, 1, 1);
+  plan.put(80, 0, safe_height);
+  plan.put(80, 0, -336);
+  plan.put(80, 0, safe_height, 1, 0);
+
+  plan.put(-50, 23, safe_height);
+  plan.put(-50, 23, -340);
+  plan.put(-50, 23, safe_height, 1, 1);
+  plan.put(80, 23, safe_height);
+  plan.put(80, 23, -336);
+  plan.put(80, 23, safe_height, 1, 0);
+  
+
+  ////////////////////
+  plan.put(-75, -23, safe_height);
+  plan.put(-75, -23, -338);
+  plan.put(-75, -23, safe_height, 1, 1);
+  plan.put(-50, -23, safe_height);
+  plan.put(-50, -23, -340);
+  plan.put(-50, -23, safe_height, 1, 0);
+
+  plan.put(-75, 0, safe_height);
+  plan.put(-75, 0, -338);
+  plan.put(-75, 0, safe_height, 1, 1);
+  plan.put(-50, 0, safe_height);
+  plan.put(-50, 0, -340);
+  plan.put(-50, 0, safe_height, 1, 0);
+
+  plan.put(-75, 23, safe_height);
+  plan.put(-75, 23, -338);
+  plan.put(-75, 23, safe_height, 1, 1);
+  plan.put(-50, 23, safe_height);
+  plan.put(-50, 23, -340);
+  plan.put(-50, 23, safe_height, 1, 0);
+
+  ////////////////////
+  plan.put(80, -23, safe_height);
+  plan.put(80, -23, -336);
+  plan.put(80, -23, safe_height, 1, 1);
+  plan.put(-75, -23, safe_height);
+  plan.put(-75, -23, -338);
+  plan.put(-75, -23, safe_height, 1, 0);
+
+  plan.put(80, 0, safe_height);
+  plan.put(80, 0, -337);
+  plan.put(80, 0, safe_height, 1, 1);
+  plan.put(-75, 0, safe_height);
+  plan.put(-75, 0, -338);
+  plan.put(-75, 0, safe_height, 1, 0);
+
+  plan.put(80, 23, safe_height);
+  plan.put(80, 23, -337);
+  plan.put(80, 23, safe_height, 1, 1);
+  plan.put(-75, 23, safe_height);
+  plan.put(-75, 23, -338);
+  plan.put(-75, 23, safe_height, 1, 0);
+
+
+  plan.put(0, 0, -330);
+
+}
+
+
 void process_serial(){
   char cmd = Serial.read();
   if (cmd > 'Z') cmd -= 32;
@@ -40,6 +140,7 @@ void process_serial(){
     case 'C': delta.add_choreography(1); break;
     case 'P': delta.add_choreography(2); break;
     case 'S': delta.add_choreography(3); break;
+    case 'M': magnet_choreography(); break;
     
     case 'K': 
       float pos1 = Serial.parseFloat(); 
@@ -48,9 +149,8 @@ void process_serial(){
       int pos4 = Serial.parseInt(); 
       if(pos4){
         int pos5 = Serial.parseInt(); 
-        plan.put(pos1, pos2, pos3, true, pos5); 
+        plan.put(pos1, pos2, pos3, true, pos5);
       }else{
-        debug.println("no tocar el iman");
         plan.put(pos1, pos2, pos3); 
       }
       break;

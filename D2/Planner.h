@@ -6,6 +6,7 @@ class Planner
   public:
     typedef struct
     {
+      int     tool;
       bool    busy;
       float   XPosition;
       float   YPosition;
@@ -38,7 +39,6 @@ class Planner
     ringBuffer  bufferQueue[RING_BUFFER_SIZE];
     
   private:
-    volatile bool tool;
     volatile unsigned char tail;
     volatile unsigned char head;
     volatile unsigned char count;

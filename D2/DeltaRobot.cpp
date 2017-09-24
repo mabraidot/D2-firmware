@@ -134,11 +134,16 @@ void DeltaRobot::stepper_choreography(){
 
 
 // Turn on/off the end effector
-void DeltaRobot::setToolState(const bool state){
-  if(state){
-    digitalWrite(MAGNET, HIGH);
-  }else{
-    digitalWrite(MAGNET, LOW);
+void DeltaRobot::setToolState(int state){
+  if(state > -1){
+    debug.print("Tool set: ");
+    if(state){
+      debug.println("ON");
+      digitalWrite(MAGNET, HIGH);
+    }else{
+      debug.println("OFF");
+      digitalWrite(MAGNET, LOW);
+    }
   }
 }
 
@@ -246,7 +251,7 @@ void DeltaRobot::run()
     
     if(!plan.isBusy()){
 
-      setVelocity(5000.0, 7000.0);
+      setVelocity(5000.0, 6000.0);
       //setVelocity(2000.0, 0.0);
 
       positions[0] = angle2steps(plan.getXTheta());
