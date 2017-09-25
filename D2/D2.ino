@@ -31,102 +31,171 @@ void loop() {
 }
 
 
+void pen_choreography(){
+  plan.put(0, 0, -300);
+
+  plan.put(-40, 0, -318);
+  plan.put(-40, 40, -318);
+  plan.put(40, 40, -318);
+  plan.put(40, -40, -318);
+  plan.put(-40, -40, -318);
+  plan.put(-40, 0, -318);
+
+  plan.put(0, 0, -300);
+}
+
+
 void magnet_choreography(){
 
-  plan.put(0, 0, -330);
-
-  /* 000 */
-  //plan.put(0, 0, -342);
-
-  /* CCC */
-  //r1
-  //plan.put(-25, -11, -342);
-  //plan.put(-25, 11, -342);
-  //r2
-  //plan.put(-50, -23, -342);
-  //plan.put(-50, 0, -342);
-  //plan.put(-50, 23, -342);
-  //r3
-  //plan.put(-75, -23, -342);
-  //plan.put(-75, 0, -342);
-  //plan.put(-75, 23, -342);
-
-  /* CCC bis */
-  //r3
-  //plan.put(80, -23, -342);
-  //plan.put(80, 0, -342);
-  //plan.put(80, 23, -342);
+  
+  float rads = 3.1415/180.0;
+  float angle = 0.0;
+  float cos60 = cos(rads*60.0);
+  float sin60 = sin(rads*60.0);
+  float cos180 = cos(rads*180.0);
+  float sin180 = sin(rads*180.0);
+  float cos300 = cos(rads*300.0);
+  float sin300 = sin(rads*300.0);
+  float x = 0.0;
+  float y = 0.0;
 
   float safe_height = -310;
+  float height = -320;
+  //float height = -329;
   
-  plan.put(-50, -23, safe_height);
-  plan.put(-50, -23, -340);
-  plan.put(-50, -23, safe_height, 1, 1);
-  plan.put(80, -23, safe_height);
-  plan.put(80, -23, -336);
-  plan.put(80, -23, safe_height, 1, 0);
+  plan.put(0, 0, safe_height);
 
-  plan.put(-50, 0, safe_height);
-  plan.put(-50, 0, -340);
-  plan.put(-50, 0, safe_height, 1, 1);
-  plan.put(80, 0, safe_height);
-  plan.put(80, 0, -336);
-  plan.put(80, 0, safe_height, 1, 0);
+  
+  for(int i = 0; i<3; i++){
+    angle = rads * ((120*i) + 60);
 
-  plan.put(-50, 23, safe_height);
-  plan.put(-50, 23, -340);
-  plan.put(-50, 23, safe_height, 1, 1);
-  plan.put(80, 23, safe_height);
-  plan.put(80, 23, -336);
-  plan.put(80, 23, safe_height, 1, 0);
+    //r1
+    x = 20 * cos(angle)      + -8 * sin(angle);
+    y = 20 * -1*sin(angle)   + -8 * cos(angle);
+    plan.put(x, y, safe_height);
+    plan.put(x, y, height);
+    x = 20 * cos(angle)      + 8 * sin(angle);
+    y = 20 * -1*sin(angle)   + 8 * cos(angle);
+    plan.put(x, y, safe_height);
+    plan.put(x, y, height);
+
+    //r2
+    x = 40 * cos(angle)      + -17 * sin(angle);
+    y = 40 * -1*sin(angle)   + -17 * cos(angle);
+    plan.put(x, y, safe_height);
+    plan.put(x, y, height);
+    x = 40 * cos(angle)      + 0 * sin(angle);
+    y = 40 * -1*sin(angle)   + 0 * cos(angle);
+    plan.put(x, y, safe_height);
+    plan.put(x, y, height);
+    x = 40 * cos(angle)      + 17 * sin(angle);
+    y = 40 * -1*sin(angle)   + 17 * cos(angle);
+    plan.put(x, y, safe_height);
+    plan.put(x, y, height);
+
+    //r3
+    x = 60 * cos(angle)      + -17 * sin(angle);
+    y = 60 * -1*sin(angle)   + -17 * cos(angle);
+    plan.put(x, y, safe_height);
+    plan.put(x, y, height);
+    x = 60 * cos(angle)      + 0 * sin(angle);
+    y = 60 * -1*sin(angle)   + 0 * cos(angle);
+    plan.put(x, y, safe_height);
+    plan.put(x, y, height);
+    x = 60 * cos(angle)      + 17 * sin(angle);
+    y = 60 * -1*sin(angle)   + 17 * cos(angle);
+    plan.put(x, y, safe_height);
+    plan.put(x, y, height);
+
+    /* bis */
+    //r3
+    x = -60 * cos(angle)      + -17 * sin(angle);
+    y = -60 * -1*sin(angle)   + -17 * cos(angle);
+    plan.put(x, y, safe_height);
+    plan.put(x, y, height);
+    x = -60 * cos(angle)      + 0 * sin(angle);
+    y = -60 * -1*sin(angle)   + 0 * cos(angle);
+    plan.put(x, y, safe_height);
+    plan.put(x, y, height);
+    x = -60 * cos(angle)      + 17 * sin(angle);
+    y = -60 * -1*sin(angle)   + 17 * cos(angle);
+    plan.put(x, y, safe_height);
+    plan.put(x, y, height);
+  }
+
+  
+
+  /*
+  //float height = -329;
+
+  plan.put(-40, -17, safe_height);
+  plan.put(-40, -17, height);
+  plan.put(-40, -17, safe_height, 1, 1);
+  plan.put(60, -17, safe_height);
+  plan.put(60, -17, height);
+  plan.put(60, -17, safe_height, 1, 0);
+
+  plan.put(-40, 0, safe_height);
+  plan.put(-40, 0, height);
+  plan.put(-40, 0, safe_height, 1, 1);
+  plan.put(60, 0, safe_height);
+  plan.put(60, 0, height);
+  plan.put(60, 0, safe_height, 1, 0);
+
+  plan.put(-40, 17, safe_height);
+  plan.put(-40, 17, height);
+  plan.put(-40, 17, safe_height, 1, 1);
+  plan.put(60, 17, safe_height);
+  plan.put(60, 17, height);
+  plan.put(60, 17, safe_height, 1, 0);
   
 
   ////////////////////
-  plan.put(-75, -23, safe_height);
-  plan.put(-75, -23, -338);
-  plan.put(-75, -23, safe_height, 1, 1);
-  plan.put(-50, -23, safe_height);
-  plan.put(-50, -23, -340);
-  plan.put(-50, -23, safe_height, 1, 0);
+  plan.put(-60, -17, safe_height);
+  plan.put(-60, -17, height);
+  plan.put(-60, -17, safe_height, 1, 1);
+  plan.put(-40, -17, safe_height);
+  plan.put(-40, -17, height);
+  plan.put(-40, -17, safe_height, 1, 0);
 
-  plan.put(-75, 0, safe_height);
-  plan.put(-75, 0, -338);
-  plan.put(-75, 0, safe_height, 1, 1);
-  plan.put(-50, 0, safe_height);
-  plan.put(-50, 0, -340);
-  plan.put(-50, 0, safe_height, 1, 0);
+  plan.put(-60, 0, safe_height);
+  plan.put(-60, 0, height);
+  plan.put(-60, 0, safe_height, 1, 1);
+  plan.put(-40, 0, safe_height);
+  plan.put(-40, 0, height);
+  plan.put(-40, 0, safe_height, 1, 0);
 
-  plan.put(-75, 23, safe_height);
-  plan.put(-75, 23, -338);
-  plan.put(-75, 23, safe_height, 1, 1);
-  plan.put(-50, 23, safe_height);
-  plan.put(-50, 23, -340);
-  plan.put(-50, 23, safe_height, 1, 0);
+  plan.put(-60, 17, safe_height);
+  plan.put(-60, 17, height);
+  plan.put(-60, 17, safe_height, 1, 1);
+  plan.put(-40, 17, safe_height);
+  plan.put(-40, 17, height);
+  plan.put(-40, 17, safe_height, 1, 0);
 
   ////////////////////
-  plan.put(80, -23, safe_height);
-  plan.put(80, -23, -336);
-  plan.put(80, -23, safe_height, 1, 1);
-  plan.put(-75, -23, safe_height);
-  plan.put(-75, -23, -338);
-  plan.put(-75, -23, safe_height, 1, 0);
+  plan.put(60, -17, safe_height);
+  plan.put(60, -17, height);
+  plan.put(60, -17, safe_height, 1, 1);
+  plan.put(-60, -17, safe_height);
+  plan.put(-60, -17, height);
+  plan.put(-60, -17, safe_height, 1, 0);
 
-  plan.put(80, 0, safe_height);
-  plan.put(80, 0, -337);
-  plan.put(80, 0, safe_height, 1, 1);
-  plan.put(-75, 0, safe_height);
-  plan.put(-75, 0, -338);
-  plan.put(-75, 0, safe_height, 1, 0);
+  plan.put(60, 0, safe_height);
+  plan.put(60, 0, height);
+  plan.put(60, 0, safe_height, 1, 1);
+  plan.put(-60, 0, safe_height);
+  plan.put(-60, 0, height);
+  plan.put(-60, 0, safe_height, 1, 0);
 
-  plan.put(80, 23, safe_height);
-  plan.put(80, 23, -337);
-  plan.put(80, 23, safe_height, 1, 1);
-  plan.put(-75, 23, safe_height);
-  plan.put(-75, 23, -338);
-  plan.put(-75, 23, safe_height, 1, 0);
+  plan.put(60, 17, safe_height);
+  plan.put(60, 17, height);
+  plan.put(60, 17, safe_height, 1, 1);
+  plan.put(-60, 17, safe_height);
+  plan.put(-60, 17, height);
+  plan.put(-60, 17, safe_height, 1, 0);
+  */
 
-
-  plan.put(0, 0, -330);
+  plan.put(0, 0, safe_height);
 
 }
 
@@ -141,6 +210,7 @@ void process_serial(){
     case 'P': delta.add_choreography(2); break;
     case 'S': delta.add_choreography(3); break;
     case 'M': magnet_choreography(); break;
+    case 'B': pen_choreography(); break;
     
     case 'K': 
       float pos1 = Serial.parseFloat(); 

@@ -39,23 +39,24 @@ void DeltaRobot::stepper_choreography(){
   if(!plan.isFull() && choreography > 0){
     // do the opening movement
     if(!delta_start_centered){
-      delta_start_centered = plan.put(0, 0, -330);
+      delta_start_centered = plan.put(0, 0, -300);
     }
 
     if(!delta_choreo_finished){
       
       // CIRCLE
       if(choreography == 1){
-
+          float height1 = -318.0;
+          float height2 = -280.0;
           static float rads = 0.0;
           if(i <= 360){
             rads = i*3.1415/180.0;
-            plan.put(110*cos(rads), 110*sin(rads), -330);
+            plan.put(110*cos(rads), 110*sin(rads), height1);
             i += 6;
           }
           if(i > 360 && j <= 360){
             rads = j*3.1415/180.0;
-            plan.put(50*cos(rads), 50*sin(rads), -280);
+            plan.put(50*cos(rads), 50*sin(rads), height2);
             j += 6;
           }
           if(i > 360 && j > 360){
@@ -112,7 +113,7 @@ void DeltaRobot::stepper_choreography(){
       }
 
     }else if(!delta_end_centered){
-      delta_end_centered = plan.put(0, 0, -330);
+      delta_end_centered = plan.put(0, 0, -300);
     }
 
 
