@@ -61,12 +61,11 @@ void magnet_choreography(){
 
   float safe_height = -310;
   float height = -320;
-  //float height = -329;
   
   plan.put(0, 0, safe_height);
 
   
-  for(int i = 0; i<3; i++){
+  /*for(int i = 0; i<3; i++){
     angle = rads * ((120*i) + 60);
 
     //r1
@@ -107,7 +106,7 @@ void magnet_choreography(){
     plan.put(x, y, safe_height);
     plan.put(x, y, height);
 
-    /* bis */
+    // bis 
     //r3
     x = -60 * cos(angle)      + -17 * sin(angle);
     y = -60 * -1*sin(angle)   + -17 * cos(angle);
@@ -121,12 +120,12 @@ void magnet_choreography(){
     y = -60 * -1*sin(angle)   + 17 * cos(angle);
     plan.put(x, y, safe_height);
     plan.put(x, y, height);
-  }
+  }*/
 
   
 
-  /*
-  //float height = -329;
+  
+  height = -329;
 
   plan.put(-40, -17, safe_height);
   plan.put(-40, -17, height);
@@ -193,7 +192,7 @@ void magnet_choreography(){
   plan.put(-60, 17, safe_height);
   plan.put(-60, 17, height);
   plan.put(-60, 17, safe_height, 1, 0);
-  */
+  
 
   plan.put(0, 0, safe_height);
 

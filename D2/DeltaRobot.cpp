@@ -252,7 +252,7 @@ void DeltaRobot::run()
     
     if(!plan.isBusy()){
 
-      setVelocity(5000.0, 6000.0);
+      setVelocity(5000.0, 10000.0);
       //setVelocity(2000.0, 0.0);
 
       positions[0] = angle2steps(plan.getXTheta());
