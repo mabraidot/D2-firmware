@@ -59,8 +59,8 @@ void magnet_choreography(){
   float x = 0.0;
   float y = 0.0;
 
-  float safe_height = -310;
-  float height = -320;
+  float safe_height = -325;
+  float height = -346;
   
   plan.put(0, 0, safe_height);
 
@@ -125,8 +125,6 @@ void magnet_choreography(){
   
 
   
-  height = -329;
-
   plan.put(-40, -17, safe_height);
   plan.put(-40, -17, height);
   plan.put(-40, -17, safe_height, 1, 1);
