@@ -207,7 +207,7 @@ void process_serial(){
     case 'P': delta.add_choreography(2); break;
     case 'S': delta.add_choreography(3); break;
     case 'M': magnet_choreography(); break;
-    case 'B': pen_choreography(); break;
+    //case 'B': pen_choreography(); break;
     
     case 'K': 
       float pos1 = Serial.parseFloat(); 
@@ -234,8 +234,9 @@ void help() {
   Serial.println(F(""));
   Serial.println(F("?: will print this help message again"));
   Serial.println(F("H: perform a homing action"));
-  Serial.println(F("C: Little choreography"));
+  Serial.println(F("C: Circle choreography"));
   Serial.println(F("P: P&P choreography"));
   Serial.println(F("S: Sigmoid choreography"));
-  Serial.println(F("K1,2,-3: Inverse Kinematics (X,Y,Z) -> (1,2,-3)"));
+  Serial.println(F("M: Magnet choreography"));
+  Serial.println(F("K1,2,-3,4,5: Inverse Kinematics (X,Y,Z) -> (1,2,-3), 4:(0|1) Pick magnet, 5:(0|1) Turn magnet on/off"));
 }
