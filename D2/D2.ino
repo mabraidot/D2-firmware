@@ -3,31 +3,17 @@
 #include "Debug.h"
 #include "DeltaRobot.h"
 #include "Planner.h"
-
-
+#include "Magnet.h"
 
 void setup() {
   Serial.begin(250000);
   delta.init();
+  magnet.init();
 }
 
 void loop() {
   if (Serial.available()) process_serial();
   delta.run();
-  
-  /*
-  static int serial_interval = 1000;
-  static unsigned long serial_timeout = millis() + serial_interval;
-  if(serial_timeout < millis()){
-
-    //Serial.println("Empty------------------------------->");
-    //Serial.println(plan.isEmpty());
-    //Serial.println("Busy------------------------------->");
-    //Serial.println(plan.isBusy());
-    
-    serial_timeout = millis() + serial_interval;
-  }*/
-  
 }
 
 
@@ -47,152 +33,59 @@ void pen_choreography(){
 
 void magnet_choreography(){
 
+  /****************
   
-  float rads = 3.1415/180.0;
-  float angle = 0.0;
-  float cos60 = cos(rads*60.0);
-  float sin60 = sin(rads*60.0);
-  float cos180 = cos(rads*180.0);
-  float sin180 = sin(rads*180.0);
-  float cos300 = cos(rads*300.0);
-  float sin300 = sin(rads*300.0);
-  float x = 0.0;
-  float y = 0.0;
+  8 9 10
 
-  float safe_height = -325;
-  float height = -346;
+   0 1
+  2 3 4
+  5 6 7
+
+  ****************/
+  plan.put(0, 0, -300);
+
+
+  magnet.move(0, 8, 1, 4);
+  magnet.move(0, 9, 1, 3);
+  magnet.move(0, 10, 1, 2);
+
+  magnet.move(1, 8, 2, 4);
+  magnet.move(1, 9, 2, 3);
+  magnet.move(1, 10, 2, 2);
   
-  plan.put(0, 0, safe_height);
+  magnet.move(2, 8, 0, 4);
+  magnet.move(2, 9, 0, 3);
+  magnet.move(2, 10, 0, 2);
 
-  
-  /*for(int i = 0; i<3; i++){
-    angle = rads * ((120*i) + 60);
+  ///////////////////
+  magnet.move(0, 2, 0, 8);
+  magnet.move(0, 3, 0, 9);
+  magnet.move(0, 4, 0, 10);
 
-    //r1
-    x = 20 * cos(angle)      + -8 * sin(angle);
-    y = 20 * -1*sin(angle)   + -8 * cos(angle);
-    plan.put(x, y, safe_height);
-    plan.put(x, y, height);
-    x = 20 * cos(angle)      + 8 * sin(angle);
-    y = 20 * -1*sin(angle)   + 8 * cos(angle);
-    plan.put(x, y, safe_height);
-    plan.put(x, y, height);
+  magnet.move(0, 5, 0, 2);
+  magnet.move(0, 6, 0, 3);
+  magnet.move(0, 7, 0, 4);
 
-    //r2
-    x = 40 * cos(angle)      + -17 * sin(angle);
-    y = 40 * -1*sin(angle)   + -17 * cos(angle);
-    plan.put(x, y, safe_height);
-    plan.put(x, y, height);
-    x = 40 * cos(angle)      + 0 * sin(angle);
-    y = 40 * -1*sin(angle)   + 0 * cos(angle);
-    plan.put(x, y, safe_height);
-    plan.put(x, y, height);
-    x = 40 * cos(angle)      + 17 * sin(angle);
-    y = 40 * -1*sin(angle)   + 17 * cos(angle);
-    plan.put(x, y, safe_height);
-    plan.put(x, y, height);
+  magnet.move(0, 8, 0, 5);
+  magnet.move(0, 9, 0, 6);
+  magnet.move(0, 10, 0, 7);
 
-    //r3
-    x = 60 * cos(angle)      + -17 * sin(angle);
-    y = 60 * -1*sin(angle)   + -17 * cos(angle);
-    plan.put(x, y, safe_height);
-    plan.put(x, y, height);
-    x = 60 * cos(angle)      + 0 * sin(angle);
-    y = 60 * -1*sin(angle)   + 0 * cos(angle);
-    plan.put(x, y, safe_height);
-    plan.put(x, y, height);
-    x = 60 * cos(angle)      + 17 * sin(angle);
-    y = 60 * -1*sin(angle)   + 17 * cos(angle);
-    plan.put(x, y, safe_height);
-    plan.put(x, y, height);
+  ///////////////////
+  magnet.move(1, 2, 0, 10);
+  magnet.move(1, 3, 0, 9);
+  magnet.move(1, 4, 0, 8);
 
-    // bis 
-    //r3
-    x = -60 * cos(angle)      + -17 * sin(angle);
-    y = -60 * -1*sin(angle)   + -17 * cos(angle);
-    plan.put(x, y, safe_height);
-    plan.put(x, y, height);
-    x = -60 * cos(angle)      + 0 * sin(angle);
-    y = -60 * -1*sin(angle)   + 0 * cos(angle);
-    plan.put(x, y, safe_height);
-    plan.put(x, y, height);
-    x = -60 * cos(angle)      + 17 * sin(angle);
-    y = -60 * -1*sin(angle)   + 17 * cos(angle);
-    plan.put(x, y, safe_height);
-    plan.put(x, y, height);
-  }*/
+  magnet.move(2, 2, 1, 10);
+  magnet.move(2, 3, 1, 9);
+  magnet.move(2, 4, 1, 8);
 
-  
+  magnet.move(0, 2, 2, 10);
+  magnet.move(0, 3, 2, 9);
+  magnet.move(0, 4, 2, 8);
 
-  
-  plan.put(-40, -17, safe_height);
-  plan.put(-40, -17, height);
-  plan.put(-40, -17, safe_height, 1, 1);
-  plan.put(60, -17, safe_height);
-  plan.put(60, -17, height);
-  plan.put(60, -17, safe_height, 1, 0);
 
-  plan.put(-40, 0, safe_height);
-  plan.put(-40, 0, height);
-  plan.put(-40, 0, safe_height, 1, 1);
-  plan.put(60, 0, safe_height);
-  plan.put(60, 0, height);
-  plan.put(60, 0, safe_height, 1, 0);
+  plan.put(0, 0, -300);
 
-  plan.put(-40, 17, safe_height);
-  plan.put(-40, 17, height);
-  plan.put(-40, 17, safe_height, 1, 1);
-  plan.put(60, 17, safe_height);
-  plan.put(60, 17, height);
-  plan.put(60, 17, safe_height, 1, 0);
-  
-
-  ////////////////////
-  plan.put(-60, -17, safe_height);
-  plan.put(-60, -17, height);
-  plan.put(-60, -17, safe_height, 1, 1);
-  plan.put(-40, -17, safe_height);
-  plan.put(-40, -17, height);
-  plan.put(-40, -17, safe_height, 1, 0);
-
-  plan.put(-60, 0, safe_height);
-  plan.put(-60, 0, height);
-  plan.put(-60, 0, safe_height, 1, 1);
-  plan.put(-40, 0, safe_height);
-  plan.put(-40, 0, height);
-  plan.put(-40, 0, safe_height, 1, 0);
-
-  plan.put(-60, 17, safe_height);
-  plan.put(-60, 17, height);
-  plan.put(-60, 17, safe_height, 1, 1);
-  plan.put(-40, 17, safe_height);
-  plan.put(-40, 17, height);
-  plan.put(-40, 17, safe_height, 1, 0);
-
-  ////////////////////
-  plan.put(60, -17, safe_height);
-  plan.put(60, -17, height);
-  plan.put(60, -17, safe_height, 1, 1);
-  plan.put(-60, -17, safe_height);
-  plan.put(-60, -17, height);
-  plan.put(-60, -17, safe_height, 1, 0);
-
-  plan.put(60, 0, safe_height);
-  plan.put(60, 0, height);
-  plan.put(60, 0, safe_height, 1, 1);
-  plan.put(-60, 0, safe_height);
-  plan.put(-60, 0, height);
-  plan.put(-60, 0, safe_height, 1, 0);
-
-  plan.put(60, 17, safe_height);
-  plan.put(60, 17, height);
-  plan.put(60, 17, safe_height, 1, 1);
-  plan.put(-60, 17, safe_height);
-  plan.put(-60, 17, height);
-  plan.put(-60, 17, safe_height, 1, 0);
-  
-
-  plan.put(0, 0, safe_height);
 
 }
 
@@ -229,14 +122,16 @@ void process_serial(){
 }
 
 void help() {
-  Serial.println(F("\nStepper motor interface emulator"));
-  Serial.println(F("Available serial commands: (lines end with CRLF or LF)"));
+  Serial.println(F("\nInterfaz Delta Robot"));
+  Serial.println(F("Comandos disponibles:"));
   Serial.println(F(""));
-  Serial.println(F("?: will print this help message again"));
-  Serial.println(F("H: perform a homing action"));
-  Serial.println(F("C: Circle choreography"));
-  Serial.println(F("P: P&P choreography"));
-  Serial.println(F("S: Sigmoid choreography"));
-  Serial.println(F("M: Magnet choreography"));
-  Serial.println(F("K1,2,-3,4,5: Inverse Kinematics (X,Y,Z) -> (1,2,-3), 4:(0|1) Pick magnet, 5:(0|1) Turn magnet on/off"));
+  Serial.println(F("?: Esta ayuda"));
+  Serial.println(F("H: Realizar una acción de home en cada brazo"));
+  Serial.println(F("C: Coreografía de círculo"));
+  Serial.println(F("P: Coreografía de Pick and Place"));
+  Serial.println(F("S: Coreografía Sigmoide"));
+  Serial.println(F("M: Coreografía Magneto"));
+  Serial.println(F("K1,2,-3,4,5: Cinemática inversa (X,Y,Z) -> (1,2,-3)"));
+  Serial.println(F("             4:(0|1) Seleccionar imán"));
+  Serial.println(F("             5:(0|1) Encender / Apagar imán"));
 }

@@ -217,17 +217,6 @@ boolean Planner::put(float XPosition, float YPosition, float ZPosition, const bo
   
     kinematics.inverseKinematic(XPosition, YPosition, ZPosition);
     
-    /*debug.println("");
-    debug.println("Positions ----------------------------> ");
-    debug.println((String)XPosition);
-    debug.println((String)YPosition);
-    debug.println((String)ZPosition);
-    debug.println("IK Theta ----------------------------> ");
-    debug.println((String)kinematics.theta1);
-    debug.println((String)kinematics.theta2);
-    debug.println((String)kinematics.theta3);
-    */
-    
     // If intended movement is possible
     if(kinematics.status == 0){
       

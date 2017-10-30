@@ -26,7 +26,7 @@ void DeltaRobot::add_choreography(int mode){
   if(!plan.isFull() && choreography == 0 && mode > 0){
     choreography = mode;
   }else{
-    debug.println("Planner is busy. You cannot add any new movement.");
+    debug.println(F("Planner is busy. You cannot add any new movement."));
   }
 }
 void DeltaRobot::stepper_choreography(){
@@ -120,7 +120,7 @@ void DeltaRobot::stepper_choreography(){
     //if(delta_end_centered && delta_mode1_finished){
     if(delta_end_centered && delta_choreo_finished){
 
-      debug.println("<--------- End of choreography ---------> ");
+      debug.println(F("<--------- End of choreography ---------> "));
       
       choreography = 0;
 
@@ -137,12 +137,12 @@ void DeltaRobot::stepper_choreography(){
 // Turn on/off the end effector
 void DeltaRobot::setToolState(int state){
   if(state > -1){
-    debug.print("Tool set: ");
+    debug.print(F("Tool set: "));
     if(state){
-      debug.println("ON");
+      debug.println(F("ON"));
       digitalWrite(MAGNET, HIGH);
     }else{
-      debug.println("OFF");
+      debug.println(F("OFF"));
       digitalWrite(MAGNET, LOW);
     }
   }
@@ -258,20 +258,6 @@ void DeltaRobot::run()
       positions[0] = angle2steps(plan.getXTheta());
       positions[1] = angle2steps(plan.getYTheta());
       positions[2] = angle2steps(plan.getZTheta());
-      
-      /*debug.println("Prev Position ----------------------------> ");
-      debug.println((String)arms[0].position);
-      debug.println((String)arms[1].position);
-      debug.println((String)arms[2].position);
-      debug.println("New Theta ----------------------------> ");
-      debug.println((String)plan.getXTheta());
-      debug.println((String)plan.getYTheta());
-      debug.println((String)plan.getZTheta());
-      debug.println("Steps to move ----------------------------> ");
-      debug.println((String)positions[0]);
-      debug.println((String)positions[1]);
-      debug.println((String)positions[2]);
-      */
       
       //steppers.moveTo(positions);
       stepperA.moveTo(positions[0]);

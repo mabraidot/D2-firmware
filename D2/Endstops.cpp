@@ -63,20 +63,20 @@ void Endstops::update(void) {
   stateA = (stateA << 1) | !digitalRead(X_MIN_PIN) | 0xe000;
   if(stateA == 0xf000){
     _hit_A = true;
-    debug.println("Endstop A has hit.");
+    debug.println(F("Endstop A has hit."));
   }
 
   static uint16_t stateB = 0; // current debounce status
   stateB = (stateB << 1) | !digitalRead(Y_MIN_PIN) | 0xe000;
   if(stateB == 0xf000){
     _hit_B = true;
-    debug.println("Endstop B has hit.");
+    debug.println(F("Endstop B has hit."));
   }
 
   static uint16_t stateC = 0; // current debounce status
   stateC = (stateC << 1) | !digitalRead(Z_MIN_PIN) | 0xe000;
   if(stateC == 0xf000){
     _hit_C = true;
-    debug.println("Endstop C has hit.");
+    debug.println(F("Endstop C has hit."));
   }
 }
