@@ -9,8 +9,8 @@ class Magnet {
     
     Magnet() {};
     
-    float safe_height = -325;
-    float height = -347;
+    float safe_height = -338;//-325;
+    float height = -348;//-347.5;
     
     typedef struct
     {

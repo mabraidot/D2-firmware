@@ -27,11 +27,11 @@
 #define DELTA_RE                330.00 // forearm length                // 224.00
 #define DELTA_RF                102.10  // arm length                   // 101.20
 #define DELTA_GEAR_RATIO        6.82    // 150 theet big pulley / 22 theet small pulley
-#define DELTA_X_OFFSET          11     // angle compensation for axis after homing
+#define DELTA_X_OFFSET          11.2     // angle compensation for axis after homing
 #define DELTA_Y_OFFSET          11   // angle compensation for axis after homing
-#define DELTA_Z_OFFSET          11     // angle compensation for axis after homing
+#define DELTA_Z_OFFSET          11.5     // angle compensation for axis after homing
 
 /** GENERAL CONFIGURATIONS  **/
 #define DEBUG              true
-#define RING_BUFFER_SIZE   170 //255
+#define RING_BUFFER_SIZE   200 //255
 

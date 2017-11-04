@@ -52,12 +52,12 @@ void DeltaRobot::stepper_choreography(){
           if(i <= 360){
             rads = i*3.1415/180.0;
             plan.put(110*cos(rads), 110*sin(rads), height1);
-            i += 6;
+            i += 3;
           }
           if(i > 360 && j <= 360){
             rads = j*3.1415/180.0;
             plan.put(50*cos(rads), 50*sin(rads), height2);
-            j += 6;
+            j += 3;
           }
           if(i > 360 && j > 360){
             //delta_mode1_finished = true;
