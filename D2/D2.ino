@@ -6,7 +6,7 @@
 #include "Magnet.h"
 
 void setup() {
-  Serial.begin(250000);
+  Serial.begin(115200);
   delta.init();
   magnet.init();
 }
