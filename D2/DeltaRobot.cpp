@@ -13,6 +13,9 @@ DeltaRobot delta;
 
 #include <AccelStepper.h>
 #include <MultiStepper.h>
+//#include "libraries/AccelStepper/AccelStepper.h"
+//#include "libraries/AccelStepper/MultiStepper.h"
+
 AccelStepper stepperA(AccelStepper::DRIVER, X_STEP_PIN, X_DIR_PIN);
 AccelStepper stepperB(AccelStepper::DRIVER, Y_STEP_PIN, Y_DIR_PIN);
 AccelStepper stepperC(AccelStepper::DRIVER, Z_STEP_PIN, Z_DIR_PIN);
